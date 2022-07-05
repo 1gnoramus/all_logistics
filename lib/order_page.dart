@@ -1,21 +1,39 @@
 import 'package:flutter/material.dart';
+import 'order_info.dart';
+import 'bottom_data.dart';
+import 'order_type.dart';
 
-class OrderType extends StatelessWidget {
-  OrderType(this.colour, this.text);
+class OrderPage extends StatefulWidget {
+  @override
+  State<OrderPage> createState() => _OrderPageState();
+}
 
-  final Color colour;
-  final String text;
-
+class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: colour, borderRadius: BorderRadius.circular(10.0)),
-      width: 280.0,
-      height: 40.0,
-      margin: EdgeInsets.all(10.0),
-      child: Center(
-        child: Text(text),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Order Page'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          OrderType(Colors.red, 'Срочные'),
+          OrderInfo(Icons.auto_awesome, 'Костанай', 'Алматы', '22:00',
+              'РефКонтейнер'),
+          OrderInfo(Icons.auto_awesome, '-', '-', '-', '-'),
+          SizedBox(
+            width: 200.0,
+          ),
+          OrderType(Colors.green, 'Обычные'),
+          OrderInfo(
+              Icons.auto_awesome, 'Бишкек', 'Пекин', '20:00', '20-футТрак'),
+          OrderInfo(Icons.auto_awesome, 'Усть-Каменогорск', 'Нурсултан',
+              '19:00', 'Газель'),
+          BottomPanelWidget(),
+        ],
       ),
     );
   }

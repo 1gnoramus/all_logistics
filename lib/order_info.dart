@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-const kLabelTextStyle =
-    TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500, color: Colors.black);
+import 'constants.dart';
 
 class OrderInfo extends StatelessWidget {
   OrderInfo(
@@ -42,23 +40,17 @@ class OrderInfo extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.white),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     child: Column(
                       children: [
-                        Container(
-                          height: 40.0,
-                          child: Text(placeFrom, style: kLabelTextStyle),
-                        ),
+                        MainOrderInfo('МЕСТО ОТГРУЗКИ:', placeFrom),
                         SizedBox(
                           height: 10.0,
                         ),
-                        Container(
-                          height: 40.0,
-                          child: Text(placeTo, style: kLabelTextStyle),
-                        ),
+                        MainOrderInfo('МЕСТО ВЫГРУЗКИ:', placeTo),
                       ],
                     ),
                   ),
@@ -67,23 +59,40 @@ class OrderInfo extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      Container(
-                        height: 40.0,
-                        child: Text(period, style: kLabelTextStyle),
-                      ),
+                      MainOrderInfo('ВРЕМЯ ОТГРУЗКИ:', period),
                       SizedBox(
                         height: 10.0,
                       ),
-                      Container(
-                        height: 40.0,
-                        child: Text(transp, style: kLabelTextStyle),
-                      ),
+                      MainOrderInfo('ТИП ТРАНСПОРТА:', transp),
                     ],
                   )
                 ],
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class MainOrderInfo extends StatelessWidget {
+  MainOrderInfo(
+    this.title,
+    this.mainData,
+  );
+
+  final String title;
+  final String mainData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40.0,
+      child: Column(
+        children: [
+          Text(title, style: kOrderTitleTextStyle),
+          Text(mainData, style: kOrderTitleTextStyle),
         ],
       ),
     );
