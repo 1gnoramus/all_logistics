@@ -4,6 +4,8 @@ import 'order_page.dart';
 void main() => runApp(AllLogistics());
 
 class AllLogistics extends StatelessWidget {
+  var logOrderData = null;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,7 +15,7 @@ class AllLogistics extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Color(0xFFE9FB47),
       ),
-      home: OrderPage(),
+      home: OrderPage(logOrder: logOrderData),
     );
   }
 }
