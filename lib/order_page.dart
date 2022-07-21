@@ -25,6 +25,31 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     updateInfo(widget.logOrder);
+    addOrderBlock(widget.logOrder);
+  }
+
+  List<Widget> widgetKeeper = [];
+  void addOrderBlock(orderData) {
+    setState(() {
+      if (orderData != null) {
+        print('Suck: 1');
+        widgetKeeper.add(
+          Icon(
+            Icons.check,
+            color: Colors.green,
+          ),
+        );
+      } else {
+        print('Suck: 2');
+        widgetKeeper.add(
+          Icon(
+            Icons.check,
+            color: Colors.green,
+          ),
+        );
+      }
+    });
+    print(widgetKeeper.length);
   }
 
   void updateInfo(dynamic orderData) {
@@ -41,8 +66,6 @@ class _OrderPageState extends State<OrderPage> {
           uploadTime = orderData['uploadTime'];
           transpType = orderData['transType'];
         }
-        ;
-        print(orderData);
       },
     );
   }
@@ -77,6 +100,7 @@ class _OrderPageState extends State<OrderPage> {
                   );
                   if (typedData != null) {
                     updateInfo(typedData);
+                    addOrderBlock(typedData);
                   }
                 },
                 child: Container(
@@ -96,8 +120,10 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ],
           ),
-          OrderInfo(Icons.auto_awesome, 'Костанай', 'Алматы', '22:00',
-              'РефКонтейнер'),
+          Row(
+            children: widgetKeeper,
+          ),
+
           OrderInfo(Icons.auto_awesome, uploadPlace, downloadPlace, uploadTime,
               transpType),
           SizedBox(
@@ -121,6 +147,7 @@ class _OrderPageState extends State<OrderPage> {
                   );
                   if (typedData != null) {
                     updateInfo(typedData);
+                    addOrderBlock(typedData);
                   }
                 },
                 child: Container(

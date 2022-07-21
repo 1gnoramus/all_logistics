@@ -20,7 +20,6 @@ class _NewOrderPageState extends State<NewOrderPage> {
 
   void onPressed() {
     Navigator.pop(context, inputData);
-    print(inputData);
   }
 
   @override
@@ -44,7 +43,6 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   onTap: (value) {
                     uploadPlace = value;
                     inputData['uploadPlace'] = uploadPlace;
-                    print(uploadPlace);
                   },
                 ),
                 OrderTextField(
@@ -53,7 +51,6 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   onTap: (value) {
                     downloadPlace = value;
                     inputData['downloadPlace'] = downloadPlace;
-                    print(downloadPlace);
                   },
                 ),
                 OrderTextField(
@@ -62,7 +59,6 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   onTap: (value) {
                     uploadTime = value;
                     inputData['uploadTime'] = uploadTime;
-                    print(uploadTime);
                   },
                 ),
                 OrderTextField(
@@ -71,7 +67,6 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   onTap: (value) {
                     transType = value;
                     inputData['transType'] = transType;
-                    print(transType);
                   },
                 ),
                 GestureDetector(
