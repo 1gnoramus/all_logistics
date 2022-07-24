@@ -1,10 +1,16 @@
 import 'package:all_log/new_order_page.dart';
 import 'package:flutter/material.dart';
-import 'order_info.dart';
-import 'bottom_data.dart';
-import 'order_type.dart';
+import 'components/order_info.dart';
+import 'components/bottom_data.dart';
+import 'package:all_log/components/order_type.dart';
+
+String uploadPlace = '';
+String downloadPlace = '';
+String uploadTime = '';
+String transpType = '';
 
 class OrderPage extends StatefulWidget {
+  static String id = 'order_page';
   OrderPage({this.logOrder});
 
   final logOrder;
@@ -18,6 +24,7 @@ class _OrderPageState extends State<OrderPage> {
   String downloadPlace = '';
   String uploadTime = '';
   String transpType = '';
+  bool isUrgent = false;
 
   NewOrderPage newOrderPage = NewOrderPage();
 
@@ -25,31 +32,29 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     updateInfo(widget.logOrder);
-    addOrderBlock(widget.logOrder);
   }
 
-  List<Widget> widgetKeeper = [];
+  List<Widget> urgOrderKeeper = [];
+  List<Widget> comOrderKeeper = [];
+
   void addOrderBlock(orderData) {
-    setState(() {
-      if (orderData != null) {
-        print('Suck: 1');
-        widgetKeeper.add(
-          Icon(
-            Icons.check,
-            color: Colors.green,
-          ),
-        );
-      } else {
-        print('Suck: 2');
-        widgetKeeper.add(
-          Icon(
-            Icons.check,
-            color: Colors.green,
-          ),
-        );
-      }
-    });
-    print(widgetKeeper.length);
+    if (orderData != null) {
+      updateInfo(orderData);
+      setState(() {
+        if (isUrgent == true) {
+          urgOrderKeeper.add(
+            OrderInfo(Icons.auto_awesome, uploadPlace, downloadPlace,
+                uploadTime, transpType),
+          );
+        } else {
+          comOrderKeeper.add(
+            OrderInfo(Icons.auto_awesome, uploadPlace, downloadPlace,
+                uploadTime, transpType),
+          );
+        }
+      });
+    }
+    print(urgOrderKeeper.length);
   }
 
   void updateInfo(dynamic orderData) {
@@ -60,11 +65,13 @@ class _OrderPageState extends State<OrderPage> {
           downloadPlace = 'None';
           uploadTime = 'None';
           transpType = 'None';
+          isUrgent = false;
         } else {
           uploadPlace = orderData['uploadPlace'];
           downloadPlace = orderData['downloadPlace'];
           uploadTime = orderData['uploadTime'];
           transpType = orderData['transType'];
+          isUrgent = orderData['isUrgent'];
         }
       },
     );
@@ -99,7 +106,6 @@ class _OrderPageState extends State<OrderPage> {
                     ),
                   );
                   if (typedData != null) {
-                    updateInfo(typedData);
                     addOrderBlock(typedData);
                   }
                 },
@@ -120,12 +126,24 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ],
           ),
-          Row(
-            children: widgetKeeper,
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              child: Material(
+                color: Colors.orangeAccent,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20.0),
+                ),
+                elevation: 5.0,
+                child: ListView.builder(
+                  itemCount: urgOrderKeeper.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return urgOrderKeeper[index];
+                  },
+                ),
+              ),
+            ),
           ),
-
-          OrderInfo(Icons.auto_awesome, uploadPlace, downloadPlace, uploadTime,
-              transpType),
           SizedBox(
             width: 200.0,
           ),
@@ -167,10 +185,24 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ],
           ),
-          OrderInfo(
-              Icons.auto_awesome, 'Бишкек', 'Пекин', '20:00', '20-футТрак'),
-          OrderInfo(Icons.auto_awesome, 'Усть-Каменогорск', 'Нурсултан',
-              '19:00', 'Газель'),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              child: Material(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20.0),
+                ),
+                elevation: 5.0,
+                child: ListView.builder(
+                  itemCount: comOrderKeeper.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return comOrderKeeper[index];
+                  },
+                ),
+              ),
+            ),
+          ),
           BottomPanelWidget(),
           // FloatingActionButton(onPressed: floatBut),
         ],

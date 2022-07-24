@@ -1,7 +1,7 @@
-import 'package:all_log/order_type.dart';
+import 'package:all_log/components/order_type.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
-import 'bottom_data.dart';
+import 'components/bottom_data.dart';
 
 class NewOrderPage extends StatefulWidget {
   const NewOrderPage({Key? key}) : super(key: key);
@@ -15,11 +15,14 @@ class _NewOrderPageState extends State<NewOrderPage> {
   String downloadPlace = 'None';
   String uploadTime = 'None';
   String transType = 'None';
+  bool isUrgent = false;
 
   Map<String, dynamic> inputData = {};
 
   void onPressed() {
     Navigator.pop(context, inputData);
+    print(inputData);
+    inputData['isUrgent'] = isUrgent;
   }
 
   @override
@@ -70,6 +73,34 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   },
                 ),
                 GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (isUrgent == false) {
+                        isUrgent = true;
+                      } else {
+                        isUrgent = false;
+                      }
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        isUrgent ? Icons.check_box : Icons.square,
+                        color: Colors.deepOrange,
+                        size: 30.0,
+                      ),
+                      Text(
+                        'Срочный заказ',
+                        style: TextStyle(
+                            color: Colors.black45,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+                GestureDetector(
                   onTap: onPressed,
                   child: Container(
                     decoration: BoxDecoration(
@@ -79,7 +110,11 @@ class _NewOrderPageState extends State<NewOrderPage> {
                     height: 40.0,
                     margin: EdgeInsets.all(10.0),
                     child: Center(
-                      child: Text('Отправить заявку'),
+                      child: Text(
+                        'Отправить заявку',
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
@@ -105,31 +140,34 @@ class OrderTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: orderController,
-      style: TextStyle(
-        color: Colors.black,
-      ),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        icon: Icon(
-          icon,
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: TextField(
+        controller: orderController,
+        style: TextStyle(
           color: Colors.black,
         ),
-        hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          icon: Icon(
+            icon,
+            color: Colors.black,
           ),
-          borderSide: BorderSide.none,
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+            borderSide: BorderSide.none,
+          ),
         ),
+        onChanged: (value) {
+          value.toString();
+          onTap(value);
+        },
       ),
-      onChanged: (value) {
-        value.toString();
-        onTap(value);
-      },
     );
   }
 }

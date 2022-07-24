@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'order_page.dart';
+import 'news_page.dart';
 
 void main() => runApp(AllLogistics());
 
@@ -15,7 +16,11 @@ class AllLogistics extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Color(0xFFE9FB47),
       ),
-      home: OrderPage(logOrder: logOrderData),
+      routes: {
+        OrderPage.id: (context) => OrderPage(),
+        NewsPage.id: (context) => NewsPage(),
+      },
+      initialRoute: OrderPage.id,
     );
   }
 }

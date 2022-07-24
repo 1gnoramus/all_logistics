@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import '../constants.dart';
 
 class OrderInfo extends StatelessWidget {
   OrderInfo(
@@ -35,38 +35,41 @@ class OrderInfo extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Column(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Column(
+                        children: [
+                          MainOrderInfo('МЕСТО ОТГРУЗКИ:', placeFrom),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          MainOrderInfo('МЕСТО ВЫГРУЗКИ:', placeTo),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Column(
                       children: [
-                        MainOrderInfo('МЕСТО ОТГРУЗКИ:', placeFrom),
+                        MainOrderInfo('ВРЕМЯ ОТГРУЗКИ:', period),
                         SizedBox(
                           height: 10.0,
                         ),
-                        MainOrderInfo('МЕСТО ВЫГРУЗКИ:', placeTo),
+                        MainOrderInfo('ТИП ТРАНСПОРТА:', transp),
                       ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Column(
-                    children: [
-                      MainOrderInfo('ВРЕМЯ ОТГРУЗКИ:', period),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      MainOrderInfo('ТИП ТРАНСПОРТА:', transp),
-                    ],
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
