@@ -15,14 +15,11 @@ const kBottomPanelTextStyle = TextStyle(
 const kTextFieldInputDecoration = InputDecoration(
   filled: true,
   fillColor: Colors.white,
-  icon: Icon(
-    Icons.location_city,
-    color: Colors.white,
-  ),
+  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   hintStyle: TextStyle(color: Colors.grey),
   border: OutlineInputBorder(
     borderRadius: BorderRadius.all(
-      Radius.circular(10.0),
+      Radius.circular(32.0),
     ),
     borderSide: BorderSide.none,
   ),
