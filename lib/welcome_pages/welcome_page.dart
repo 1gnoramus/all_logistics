@@ -1,7 +1,7 @@
-import 'package:all_log/login_page.dart';
-import 'package:all_log/register_page.dart';
+import 'package:all_log/welcome_pages/login_page.dart';
+import 'package:all_log/welcome_pages/register_page.dart';
 import 'package:flutter/material.dart';
-import 'components/rounded button.dart';
+import '../components/rounded button.dart';
 
 class WelcomePage extends StatefulWidget {
   static String id = 'welcome_page';

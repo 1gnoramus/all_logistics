@@ -1,6 +1,7 @@
-import 'components/rounded button.dart';
+import 'package:all_log/main_pages/order_page.dart';
+import '../components/rounded button.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import '../components/constants.dart';
 
 class LoginPage extends StatefulWidget {
   static String id = 'login_screen';
@@ -63,7 +64,9 @@ class _LoginPageState extends State<LoginPage> {
             RoundedButton(
               color: Colors.orangeAccent,
               buttonText: 'Войти',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, OrderPage.id);
+              },
             ),
           ],
         ),

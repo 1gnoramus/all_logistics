@@ -1,9 +1,7 @@
-import 'package:all_log/news_page.dart';
-import 'package:all_log/order_page.dart';
+import 'package:all_log/main_pages/news_page.dart';
+import 'package:all_log/main_pages/order_page.dart';
 import 'package:flutter/material.dart';
-import '../constants.dart';
-import 'package:all_log/news_page.dart';
-import 'package:all_log/order_page.dart';
+import 'constants.dart';
 
 class BottomPanelWidget extends StatelessWidget {
   @override

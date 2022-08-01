@@ -1,6 +1,8 @@
-import 'components/rounded button.dart';
+import 'package:all_log/main_pages/order_page.dart';
+import '../components/rounded button.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import '../components/constants.dart';
+import '../main.dart';
 
 class RegisterPage extends StatefulWidget {
   static String id = 'register_screen';
@@ -63,7 +65,9 @@ class _RegisterPageState extends State<RegisterPage> {
             RoundedButton(
               color: Colors.deepOrange,
               buttonText: 'Зарегистрироваться',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, OrderPage.id);
+              },
             ),
           ],
         ),

@@ -1,7 +1,5 @@
-import 'package:all_log/components/order_type.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
-import 'components/bottom_data.dart';
+import 'package:all_log/components/bottom_data.dart';
 
 class NewOrderPage extends StatefulWidget {
   const NewOrderPage({Key? key}) : super(key: key);

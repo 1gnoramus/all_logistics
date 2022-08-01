@@ -1,10 +1,9 @@
-import 'package:all_log/register_page.dart';
+import 'package:all_log/welcome_pages/register_page.dart';
 import 'package:flutter/material.dart';
-import 'order_page.dart';
-import 'news_page.dart';
-import 'package:all_log/welcome_page.dart';
-import 'login_page.dart';
-import 'package:all_log/register_page.dart';
+import 'main_pages/order_page.dart';
+import 'main_pages/news_page.dart';
+import 'package:all_log/welcome_pages/welcome_page.dart';
+import 'welcome_pages/login_page.dart';
 
 void main() => runApp(AllLogistics());
 

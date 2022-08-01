@@ -1,8 +1,5 @@
-import 'package:all_log/new_order_page.dart';
 import 'package:flutter/material.dart';
-import 'components/order_info.dart';
-import 'components/bottom_data.dart';
-import 'package:all_log/components/order_type.dart';
+import '../components/bottom_data.dart';
 
 class NewsPage extends StatefulWidget {
   static String id = 'news_page';
