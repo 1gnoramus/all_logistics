@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "147212819385",
+    "project_id": "alllogistics-5f489",
+    "storage_bucket": "alllogistics-5f489.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147212819385:android:ab2d2886fef3472ec9b468",
+        "android_client_info": {
+          "package_name": "com.ignoramus.all_log"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147212819385-o2c37i9ohfsb38jd168g1ftjkntkhptf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3KPqxU05IGv-DIVW1HueoJGgOEqm6Q4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147212819385-o2c37i9ohfsb38jd168g1ftjkntkhptf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,11 @@
+import 'package:all_log/welcome_pages/welcome_page.dart';
+
 import 'new_order_page.dart';
 import 'package:flutter/material.dart';
 import '../components/order_info.dart';
 import '../components/bottom_data.dart';
 import 'package:all_log/components/order_type.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 String uploadPlace = '';
 String downloadPlace = '';
@@ -20,6 +23,20 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  final _auth = FirebaseAuth.instance;
+  late User loggedinUser;
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedinUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   String uploadPlace = '';
   String downloadPlace = '';
   String uploadTime = '';
@@ -31,6 +48,7 @@ class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
     super.initState();
+    getCurrentUser();
     updateInfo(widget.logOrder);
   }
 
@@ -54,7 +72,6 @@ class _OrderPageState extends State<OrderPage> {
         }
       });
     }
-    print(urgOrderKeeper.length);
   }
 
   void updateInfo(dynamic orderData) {
@@ -82,6 +99,15 @@ class _OrderPageState extends State<OrderPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Colors.indigo,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _auth.signOut();
+                Navigator.pushNamed(context, WelcomePage.id);
+              },
+              icon: Icon(Icons.logout))
+        ],
         title: Text('Order Page'),
       ),
       body: Column(

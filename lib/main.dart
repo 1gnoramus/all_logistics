@@ -4,8 +4,13 @@ import 'main_pages/order_page.dart';
 import 'main_pages/news_page.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'welcome_pages/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(AllLogistics());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(AllLogistics());
+}
 
 class AllLogistics extends StatelessWidget {
   var logOrderData = null;
