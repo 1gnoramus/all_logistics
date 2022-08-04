@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:all_log/components/bottom_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class NewOrderPage extends StatefulWidget {
   const NewOrderPage({Key? key}) : super(key: key);
@@ -9,6 +11,27 @@ class NewOrderPage extends StatefulWidget {
 }
 
 class _NewOrderPageState extends State<NewOrderPage> {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  late User loggedinUser;
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedinUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void ordersStream() async {
+    await for (var snapshot in _firestore.collection('orders').snapshots()) {
+      for (var order in snapshot.docs) {}
+    }
+  }
+
   String uploadPlace = 'None';
   String downloadPlace = 'None';
   String uploadTime = 'None';
@@ -17,10 +40,10 @@ class _NewOrderPageState extends State<NewOrderPage> {
 
   Map<String, dynamic> inputData = {};
 
-  void onPressed() {
-    Navigator.pop(context, inputData);
-    print(inputData);
-    inputData['isUrgent'] = isUrgent;
+  @override
+  void initState() {
+    getCurrentUser();
+    super.initState();
   }
 
   @override
@@ -99,7 +122,19 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: onPressed,
+                  onTap: () {
+                    _firestore.collection('orders').add({
+                      'downloadPlace': downloadPlace,
+                      'uploadPlace': uploadPlace,
+                      'uploadTime': uploadTime,
+                      'isUrgent': isUrgent,
+                      'transType': transType,
+                      'username': loggedinUser.email
+                    });
+                    Navigator.pop(context, inputData);
+                    print(inputData);
+                    inputData['isUrgent'] = isUrgent;
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.red,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kOrderTitleTextStyle =
-    TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.black);
+    TextStyle(fontSize: 13.0, fontWeight: FontWeight.w600, color: Colors.black);
 
 const kOrderMainInfTextStyle =
     TextStyle(fontSize: 15.0, fontWeight: FontWeight.w100, color: Colors.grey);

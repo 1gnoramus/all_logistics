@@ -1,5 +1,5 @@
 import 'package:all_log/welcome_pages/welcome_page.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'new_order_page.dart';
 import 'package:flutter/material.dart';
 import '../components/order_info.dart';
@@ -49,50 +49,10 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     getCurrentUser();
-    updateInfo(widget.logOrder);
   }
 
   List<Widget> urgOrderKeeper = [];
   List<Widget> comOrderKeeper = [];
-
-  void addOrderBlock(orderData) {
-    if (orderData != null) {
-      updateInfo(orderData);
-      setState(() {
-        if (isUrgent == true) {
-          urgOrderKeeper.add(
-            OrderInfo(Icons.auto_awesome, uploadPlace, downloadPlace,
-                uploadTime, transpType),
-          );
-        } else {
-          comOrderKeeper.add(
-            OrderInfo(Icons.auto_awesome, uploadPlace, downloadPlace,
-                uploadTime, transpType),
-          );
-        }
-      });
-    }
-  }
-
-  void updateInfo(dynamic orderData) {
-    setState(
-      () {
-        if (orderData == null) {
-          uploadPlace = 'None';
-          downloadPlace = 'None';
-          uploadTime = 'None';
-          transpType = 'None';
-          isUrgent = false;
-        } else {
-          uploadPlace = orderData['uploadPlace'];
-          downloadPlace = orderData['downloadPlace'];
-          uploadTime = orderData['uploadTime'];
-          transpType = orderData['transType'];
-          isUrgent = orderData['isUrgent'];
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,9 +91,6 @@ class _OrderPageState extends State<OrderPage> {
                       },
                     ),
                   );
-                  if (typedData != null) {
-                    addOrderBlock(typedData);
-                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -161,11 +118,8 @@ class _OrderPageState extends State<OrderPage> {
                   Radius.circular(20.0),
                 ),
                 elevation: 5.0,
-                child: ListView.builder(
-                  itemCount: urgOrderKeeper.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return urgOrderKeeper[index];
-                  },
+                child: OrdersStream(
+                  isUrgent: true,
                 ),
               ),
             ),
@@ -189,10 +143,6 @@ class _OrderPageState extends State<OrderPage> {
                       },
                     ),
                   );
-                  if (typedData != null) {
-                    updateInfo(typedData);
-                    addOrderBlock(typedData);
-                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -220,11 +170,8 @@ class _OrderPageState extends State<OrderPage> {
                   Radius.circular(20.0),
                 ),
                 elevation: 5.0,
-                child: ListView.builder(
-                  itemCount: comOrderKeeper.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return comOrderKeeper[index];
-                  },
+                child: OrdersStream(
+                  isUrgent: false,
                 ),
               ),
             ),
