@@ -1,5 +1,4 @@
 import 'package:all_log/welcome_pages/welcome_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'new_order_page.dart';
 import 'package:flutter/material.dart';
 import '../components/order_info.dart';
