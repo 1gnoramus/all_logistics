@@ -1,5 +1,8 @@
+import 'package:all_log/main_pages/history_page.dart';
+import 'package:all_log/main_pages/info_page.dart';
 import 'package:all_log/main_pages/news_page.dart';
 import 'package:all_log/main_pages/order_page.dart';
+import 'package:all_log/main_pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
 
@@ -26,10 +29,20 @@ class BottomPanelWidget extends StatelessWidget {
                 );
               },
               child: ItemContent(icon: Icons.newspaper, title: 'Новости')),
-          GestureDetector(child: ItemContent(icon: Icons.info, title: 'Инфо')),
           GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, InfoPage.id);
+              },
+              child: ItemContent(icon: Icons.info, title: 'Инфо')),
+          GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, HistoryPage.id);
+              },
               child: ItemContent(icon: Icons.history, title: 'История')),
           GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, ProfilePage.id);
+              },
               child: ItemContent(icon: Icons.person, title: 'Профиль')),
         ],
       ),

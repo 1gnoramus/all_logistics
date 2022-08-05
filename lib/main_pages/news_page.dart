@@ -12,7 +12,9 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  List<Widget> lateNews = [
+  List<Widget> currentNewsType = [];
+
+  List<NewsPiece> lateNews = [
     NewsPiece(
       title: 'Brand News!',
       text: 'Some late news',
@@ -24,61 +26,65 @@ class _NewsPageState extends State<NewsPage> {
       icon: Icons.accessibility_outlined,
     ),
   ];
-  String currentNewsType = 'Late News';
 
-  List<Widget> logisticsNews = [
+  List<NewsPiece> logisticsNews = [
     NewsPiece(
       title: 'Logistics News!',
       text: 'Some Logistics news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.car_crash_outlined,
     ),
     NewsPiece(
       title: 'Logistics News!',
       text: 'One more Logistics news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.car_crash_outlined,
     ),
   ];
 
-  List<Widget> politicNews = [
+  List<NewsPiece> politicNews = [
     NewsPiece(
       title: 'Politic News!',
       text: 'Some Politic news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.local_police_outlined,
     ),
     NewsPiece(
       title: 'Politic News!',
       text: 'One more Politic news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.local_police_outlined,
     ),
   ];
 
-  List<Widget> economyNews = [
+  List<NewsPiece> economyNews = [
     NewsPiece(
       title: 'Economy News!',
       text: 'Some Economy news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.auto_graph_rounded,
     ),
     NewsPiece(
       title: 'Economy News!',
       text: 'One more Economy news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.auto_graph_rounded,
     ),
   ];
 
-  List<Widget> fairNews = [
+  List<NewsPiece> fireNews = [
     NewsPiece(
       title: 'Fair News!',
       text: 'Some Fair news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.celebration,
     ),
     NewsPiece(
       title: 'Fair News!',
       text: 'One more Fair news',
-      icon: Icons.accessibility_outlined,
+      icon: Icons.celebration,
     ),
   ];
 
   final _auth = FirebaseAuth.instance;
+  @override
+  void initState() {
+    currentNewsType = lateNews;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +119,7 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Последние новости',
                   onPressed: () {
                     setState(() {
-                      currentNewsType = 'Late News';
+                      currentNewsType = lateNews;
                     });
                   },
                 ),
@@ -124,7 +130,7 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Логистика',
                   onPressed: () {
                     setState(() {
-                      currentNewsType = 'Logistics News';
+                      currentNewsType = logisticsNews;
                     });
                   },
                 ),
@@ -135,7 +141,7 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Политика',
                   onPressed: () {
                     setState(() {
-                      currentNewsType = 'Politic News';
+                      currentNewsType = politicNews;
                     });
                   },
                 ),
@@ -146,7 +152,7 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Экономика',
                   onPressed: () {
                     setState(() {
-                      currentNewsType = 'Economy News';
+                      currentNewsType = economyNews;
                     });
                   },
                 ),
@@ -157,7 +163,7 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Популярное',
                   onPressed: () {
                     setState(() {
-                      currentNewsType = 'Fire News';
+                      currentNewsType = fireNews;
                     });
                   },
                 ),
@@ -175,21 +181,9 @@ class _NewsPageState extends State<NewsPage> {
                 ),
               ),
               child: ListView.builder(
-                itemCount: lateNews.length,
+                itemCount: currentNewsType.length,
                 itemBuilder: (BuildContext context, int index) {
-                  if (currentNewsType == 'Late News') {
-                    return lateNews[index];
-                  } else if (currentNewsType == 'Logistics News') {
-                    return logisticsNews[index];
-                  } else if (currentNewsType == 'Politic News') {
-                    return politicNews[index];
-                  } else if (currentNewsType == 'Economy News') {
-                    return economyNews[index];
-                  } else if (currentNewsType == 'Fire News') {
-                    return fairNews[index];
-                  } else {
-                    return lateNews[index];
-                  }
+                  return currentNewsType[index];
                 },
               ),
             ),

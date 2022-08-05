@@ -78,7 +78,7 @@ class _OrderPageState extends State<OrderPage> {
             children: [
               OrderType(
                 Colors.red,
-                'Срочные',
+                'Срочные()',
               ),
               GestureDetector(
                 onTap: () async {
@@ -130,7 +130,7 @@ class _OrderPageState extends State<OrderPage> {
             children: [
               OrderType(
                 Colors.green,
-                'Обычные',
+                'Обычные (${comOrderKeeper.length})',
               ),
               GestureDetector(
                 onTap: () async {

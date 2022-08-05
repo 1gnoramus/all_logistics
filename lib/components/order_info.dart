@@ -9,6 +9,7 @@ final _firestore = FirebaseFirestore.instance;
 
 class OrderBox extends StatelessWidget {
   OrderBox({
+    required this.userName,
     required this.icon,
     required this.uploadPlace,
     required this.downloadPlace,
@@ -16,6 +17,7 @@ class OrderBox extends StatelessWidget {
     required this.transType,
   });
 
+  final String userName;
   final IconData icon;
   final String uploadTime;
   final String uploadPlace;
@@ -51,7 +53,7 @@ class OrderBox extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '${_auth.currentUser?.email}    ',
+                      '$userName    ',
                       style: TextStyle(fontSize: 12.0, color: Colors.black54),
                     ),
                     Container(
@@ -124,6 +126,9 @@ class OrdersStream extends StatelessWidget {
 
   final bool isUrgent;
 
+  List<OrderBox> urgOrderBoxes = [];
+  List<OrderBox> comOrderBoxes = [];
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -137,12 +142,13 @@ class OrdersStream extends StatelessWidget {
           );
         }
         final orders = snapshot.data?.docs;
-        List<OrderBox> urgOrderBoxes = [];
-        List<OrderBox> comOrderBoxes = [];
 
         for (var order in orders!) {
           if (order.get('isUrgent') == true) {
             final orderBox = OrderBox(
+              userName: order.data().toString().contains('username')
+                  ? order.get('username')
+                  : '',
               icon: Icons.stacked_line_chart_outlined,
               uploadPlace: order.data().toString().contains('uploadPlace')
                   ? order.get('uploadPlace')
@@ -160,6 +166,9 @@ class OrdersStream extends StatelessWidget {
             urgOrderBoxes.add(orderBox);
           } else if (order.get('isUrgent') == false) {
             final orderBox = OrderBox(
+              userName: order.data().toString().contains('username')
+                  ? order.get('username')
+                  : '',
               icon: Icons.stacked_line_chart_outlined,
               uploadPlace: order.data().toString().contains('uploadPlace')
                   ? order.get('uploadPlace')
