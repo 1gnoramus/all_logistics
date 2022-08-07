@@ -24,3 +24,31 @@ const kTextFieldInputDecoration = InputDecoration(
     borderSide: BorderSide.none,
   ),
 );
+
+const List<String> foldersList = [
+  'Информация в дорогу',
+  'Шаблоны сопроводительных \n документов',
+  'Разное'
+];
+
+const List<String> roadInfoFolder = [
+  'Состояние дорог',
+  'Требования к транспорту',
+  'Правила дорожного движения',
+  'Пункты ТО',
+  'Пункты для отдыха'
+];
+
+const List<String> docsExamplesFolder = [
+  'Пример накладной',
+  'Шаблон путевого листа',
+  'Товарно-транспортная накладная',
+  'Инвойс',
+];
+const List<String> stuffFolder = [
+  'Журнал от KazNews 06.02.1988',
+  'Журнал от KazNews 22.12.2018',
+  'Брошюра от Merch 06.02.1988',
+  'Газета от KazMagaz 06.02.1988',
+  'Сканворд "Дед"',
+];

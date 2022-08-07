@@ -50,9 +50,6 @@ class _OrderPageState extends State<OrderPage> {
     getCurrentUser();
   }
 
-  List<Widget> urgOrderKeeper = [];
-  List<Widget> comOrderKeeper = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +75,7 @@ class _OrderPageState extends State<OrderPage> {
             children: [
               OrderType(
                 Colors.red,
-                'Срочные()',
+                'Срочные: (0)',
               ),
               GestureDetector(
                 onTap: () async {
@@ -130,7 +127,7 @@ class _OrderPageState extends State<OrderPage> {
             children: [
               OrderType(
                 Colors.green,
-                'Обычные (${comOrderKeeper.length})',
+                'Обычные : (0)',
               ),
               GestureDetector(
                 onTap: () async {

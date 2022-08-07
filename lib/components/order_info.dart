@@ -129,6 +129,14 @@ class OrdersStream extends StatelessWidget {
   List<OrderBox> urgOrderBoxes = [];
   List<OrderBox> comOrderBoxes = [];
 
+  // int get urgOrdersCount {
+  //   return urgOrderBoxes.length;
+  // }
+  //
+  // int get comOrdersCount {
+  //   return comOrderBoxes.length;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
