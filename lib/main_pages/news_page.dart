@@ -206,7 +206,7 @@ class NewsPiece extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(5.0),
-      color: Colors.orangeAccent,
+      color: Colors.purple,
       child: Row(
         children: [
           Icon(

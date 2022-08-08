@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:all_log/main_pages/show_order_detail_page.dart';
 
 final _auth = FirebaseAuth.instance;
 
@@ -15,9 +16,12 @@ class OrderBox extends StatelessWidget {
     required this.downloadPlace,
     required this.uploadTime,
     required this.transType,
+    required this.orderNum,
   });
 
   final String userName;
+  final int orderNum;
+
   final IconData icon;
   final String uploadTime;
   final String uploadPlace;
@@ -45,50 +49,73 @@ class OrderBox extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Material(
-                borderRadius: BorderRadius.circular(15.0),
-                elevation: 5.0,
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '$userName    ',
-                      style: TextStyle(fontSize: 12.0, color: Colors.black54),
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: ShowOrderDetailPage(
+                          uploadPlace: uploadPlace,
+                          downloadPlace: downloadPlace,
+                          uploadTime: uploadTime,
+                          transType: transType,
+                          userName: userName,
+                          icon: icon,
+                          orderNum: orderNum,
+                        ),
+                      ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Column(
+                  );
+                },
+                child: Material(
+                  borderRadius: BorderRadius.circular(15.0),
+                  elevation: 10.0,
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '$userName    ',
+                        style: TextStyle(fontSize: 12.0, color: Colors.black54),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Column(
+                                children: [
+                                  MainOrderInfo('МЕСТО ОТГРУЗКИ:', uploadPlace),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  MainOrderInfo(
+                                      'МЕСТО ВЫГРУЗКИ:', downloadPlace),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Column(
                               children: [
-                                MainOrderInfo('МЕСТО ОТГРУЗКИ:', uploadPlace),
+                                MainOrderInfo('ВРЕМЯ ОТГРУЗКИ:', uploadTime),
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                MainOrderInfo('МЕСТО ВЫГРУЗКИ:', downloadPlace),
+                                MainOrderInfo('ТИП ТРАНСПОРТА:', transType),
                               ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Column(
-                            children: [
-                              MainOrderInfo('ВРЕМЯ ОТГРУЗКИ:', uploadTime),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              MainOrderInfo('ТИП ТРАНСПОРТА:', transType),
-                            ],
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -129,14 +156,6 @@ class OrdersStream extends StatelessWidget {
   List<OrderBox> urgOrderBoxes = [];
   List<OrderBox> comOrderBoxes = [];
 
-  // int get urgOrdersCount {
-  //   return urgOrderBoxes.length;
-  // }
-  //
-  // int get comOrdersCount {
-  //   return comOrderBoxes.length;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -170,6 +189,7 @@ class OrdersStream extends StatelessWidget {
               transType: order.data().toString().contains('transType')
                   ? order.get('transType')
                   : '',
+              orderNum: urgOrderBoxes.length,
             );
             urgOrderBoxes.add(orderBox);
           } else if (order.get('isUrgent') == false) {
@@ -190,6 +210,7 @@ class OrdersStream extends StatelessWidget {
               transType: order.data().toString().contains('transType')
                   ? order.get('transType')
                   : '',
+              orderNum: comOrderBoxes.length,
             );
             comOrderBoxes.add(orderBox);
           }

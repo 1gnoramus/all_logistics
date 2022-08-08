@@ -69,39 +69,63 @@ class _HistoryPageState extends State<HistoryPage> {
 }
 
 class HistoryPiece extends StatelessWidget {
-  HistoryPiece({
-    required this.title,
-    required this.titleColor,
-    required this.histColor,
-    required this.statusText,
-  });
+  HistoryPiece(
+      {required this.title,
+      required this.titleColor,
+      required this.histColor,
+      required this.statusText});
   final String title;
   final Color titleColor;
   final Color histColor;
+
   final String statusText;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 5.0),
-            padding: EdgeInsets.all(5.0),
-            color: titleColor,
-            child: Text(title),
-          ),
-          History(
-            histColor: histColor,
-            statusText: statusText,
-          ),
-          History(
-            histColor: histColor,
-            statusText: statusText,
-          ),
-        ],
+    List<History> histBoxesList = [
+      History(
+        histColor: histColor,
+        statusText: statusText,
+      ),
+      History(
+        histColor: histColor,
+        statusText: statusText,
+      ),
+      History(
+        histColor: histColor,
+        statusText: statusText,
+      ),
+      History(
+        histColor: histColor,
+        statusText: statusText,
+      ),
+    ];
+
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 5.0),
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                color: titleColor,
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              child: Text(title),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  return histBoxesList[index];
+                },
+                itemCount: histBoxesList.length,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -115,25 +139,43 @@ class History extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-      color: histColor,
-      child: Column(
-        children: [
-          Center(
-            child: Text(
-              'Заказ Номер 337',
-              style: kBottomPanelTextStyle,
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+        child: Material(
+          elevation: 7.0,
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            decoration: BoxDecoration(
+              color: histColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            child: Column(
+              children: [
+                Center(
+                  child: Text(
+                    'Заказ Номер 337',
+                    style: kBottomPanelTextStyle,
+                  ),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Статус: $statusText'),
+                    Text('Дата: 19.02.2001'),
+                  ],
+                )
+              ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Статус: $statusText'),
-              Text('Дата: 19.02.2001'),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
