@@ -172,7 +172,7 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ),
           ),
-          BottomPanelWidget(),
+          BottomPanelWidget('Orders'),
           // FloatingActionButton(onPressed: floatBut),
         ],
       ),

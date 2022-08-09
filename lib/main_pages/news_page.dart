@@ -12,6 +12,7 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+  String isClicked = 'Late';
   List<Widget> currentNewsType = [];
 
   List<NewsPiece> lateNews = [
@@ -110,8 +111,10 @@ class _NewsPageState extends State<NewsPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            height: 30.0,
-            color: Colors.white,
+            decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            height: 40.0,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
@@ -119,9 +122,11 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Последние новости',
                   onPressed: () {
                     setState(() {
+                      isClicked = 'Late';
                       currentNewsType = lateNews;
                     });
                   },
+                  isClicked: isClicked == 'Late' ? true : false,
                 ),
                 SizedBox(
                   width: 20.0,
@@ -131,8 +136,10 @@ class _NewsPageState extends State<NewsPage> {
                   onPressed: () {
                     setState(() {
                       currentNewsType = logisticsNews;
+                      isClicked = 'Log';
                     });
                   },
+                  isClicked: isClicked == 'Log' ? true : false,
                 ),
                 SizedBox(
                   width: 20.0,
@@ -141,9 +148,12 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Политика',
                   onPressed: () {
                     setState(() {
+                      isClicked = 'Polit';
+
                       currentNewsType = politicNews;
                     });
                   },
+                  isClicked: isClicked == 'Polit' ? true : false,
                 ),
                 SizedBox(
                   width: 20.0,
@@ -152,9 +162,12 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Экономика',
                   onPressed: () {
                     setState(() {
+                      isClicked = 'Econ';
+
                       currentNewsType = economyNews;
                     });
                   },
+                  isClicked: isClicked == 'Econ' ? true : false,
                 ),
                 SizedBox(
                   width: 20.0,
@@ -163,23 +176,18 @@ class _NewsPageState extends State<NewsPage> {
                   title: 'Популярное',
                   onPressed: () {
                     setState(() {
+                      isClicked = 'Popul';
                       currentNewsType = fireNews;
                     });
                   },
+                  isClicked: isClicked == 'Popul' ? true : false,
                 ),
               ],
             ),
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(top: 20.0),
               padding: EdgeInsets.all(3.0),
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-              ),
               child: ListView.builder(
                 itemCount: currentNewsType.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -188,7 +196,7 @@ class _NewsPageState extends State<NewsPage> {
               ),
             ),
           ),
-          BottomPanelWidget(),
+          BottomPanelWidget('News'),
         ],
       ),
     );
@@ -235,22 +243,28 @@ class NewsPiece extends StatelessWidget {
 }
 
 class NewsType extends StatelessWidget {
-  NewsType({required this.title, required this.onPressed});
+  NewsType(
+      {required this.title, required this.onPressed, required this.isClicked});
 
   final String title;
   final VoidCallback onPressed;
+  final bool isClicked;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.only(left: 5.0, right: 5.0),
-        child: GestureDetector(
-          onTap: onPressed,
-          child: Text(
-            title,
-            style: TextStyle(color: Colors.black, fontSize: 15.0),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: isClicked ? Colors.red.shade300 : Colors.red.shade800,
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.0)),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: isClicked ? Colors.black : Colors.white, fontSize: 15.0),
         ),
       ),
     );

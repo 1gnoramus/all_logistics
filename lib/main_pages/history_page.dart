@@ -61,7 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ],
             ),
           ),
-          BottomPanelWidget()
+          BottomPanelWidget('History')
         ],
       ),
     );

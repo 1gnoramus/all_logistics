@@ -171,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ]),
           ),
-          BottomPanelWidget()
+          BottomPanelWidget('Profile')
         ],
       ),
     );
@@ -189,11 +189,11 @@ class ProfileMainInfoPiece extends StatelessWidget {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 14.0, color: Colors.black),
+        style: TextStyle(fontSize: 12.0, color: Colors.black),
       ),
       margin: EdgeInsets.all(10.0),
       padding: EdgeInsets.symmetric(horizontal: 50.0),
-      width: 220.0,
+      width: 200.0,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
