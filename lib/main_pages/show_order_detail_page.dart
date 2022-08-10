@@ -1,7 +1,26 @@
 import 'package:all_log/main_pages/history_page.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class ShowOrderDetailPage extends StatelessWidget {
+  late User loggedinUser;
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedinUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+    ;
+  }
+
   ShowOrderDetailPage({
     required this.userName,
     required this.icon,
@@ -22,6 +41,7 @@ class ShowOrderDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getCurrentUser();
     return Container(
       color: Color(0xff757575),
       child: Container(
@@ -69,6 +89,15 @@ class ShowOrderDetailPage extends StatelessWidget {
             FlatButton(
               color: Colors.lightBlueAccent,
               onPressed: () {
+                _firestore.collection('inProcessingOrders').add({
+                  'downloadPlace': downloadPlace,
+                  'uploadPlace': uploadPlace,
+                  'uploadTime': uploadTime,
+                  'transType': transType,
+                  'customerUsername': userName,
+                  'executorUsername': loggedinUser.email,
+                  'number': orderNum,
+                });
                 Navigator.pushNamed(context, HistoryPage.id);
               },
               child: Text(

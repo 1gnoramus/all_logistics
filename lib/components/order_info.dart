@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:all_log/main_pages/show_order_detail_page.dart';
+import 'package:all_log/components/order_data.dart';
 
 final _auth = FirebaseAuth.instance;
 
@@ -153,9 +155,6 @@ class OrdersStream extends StatelessWidget {
 
   final bool isUrgent;
 
-  List<OrderBox> urgOrderBoxes = [];
-  List<OrderBox> comOrderBoxes = [];
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -168,66 +167,74 @@ class OrdersStream extends StatelessWidget {
             ),
           );
         }
-        final orders = snapshot.data?.docs;
+        final urgOrders = snapshot.data?.docs.map(
+          (order) {
+            if (order.get('isUrgent') == true) {
+              OrderBox(
+                userName: order.data().toString().contains('username')
+                    ? order.get('username')
+                    : '',
+                icon: Icons.stacked_line_chart_outlined,
+                uploadPlace: order.data().toString().contains('uploadPlace')
+                    ? order.get('uploadPlace')
+                    : '',
+                downloadPlace: order.data().toString().contains('downloadPlace')
+                    ? order.get('downloadPlace')
+                    : '',
+                uploadTime: order.data().toString().contains('uploadTime')
+                    ? order.get('uploadTime')
+                    : '',
+                transType: order.data().toString().contains('transType')
+                    ? order.get('transType')
+                    : '',
+                orderNum: Provider.of<OrderData>(context).urgOrderBoxes.length,
+              );
+            }
+          },
+        ).toList();
 
-        for (var order in orders!) {
-          if (order.get('isUrgent') == true) {
-            final orderBox = OrderBox(
-              userName: order.data().toString().contains('username')
-                  ? order.get('username')
-                  : '',
-              icon: Icons.stacked_line_chart_outlined,
-              uploadPlace: order.data().toString().contains('uploadPlace')
-                  ? order.get('uploadPlace')
-                  : '',
-              downloadPlace: order.data().toString().contains('downloadPlace')
-                  ? order.get('downloadPlace')
-                  : '',
-              uploadTime: order.data().toString().contains('uploadTime')
-                  ? order.get('uploadTime')
-                  : '',
-              transType: order.data().toString().contains('transType')
-                  ? order.get('transType')
-                  : '',
-              orderNum: urgOrderBoxes.length,
-            );
-            urgOrderBoxes.add(orderBox);
-          } else if (order.get('isUrgent') == false) {
-            final orderBox = OrderBox(
-              userName: order.data().toString().contains('username')
-                  ? order.get('username')
-                  : '',
-              icon: Icons.stacked_line_chart_outlined,
-              uploadPlace: order.data().toString().contains('uploadPlace')
-                  ? order.get('uploadPlace')
-                  : '',
-              downloadPlace: order.data().toString().contains('downloadPlace')
-                  ? order.get('downloadPlace')
-                  : '',
-              uploadTime: order.data().toString().contains('uploadTime')
-                  ? order.get('uploadTime')
-                  : '',
-              transType: order.data().toString().contains('transType')
-                  ? order.get('transType')
-                  : '',
-              orderNum: comOrderBoxes.length,
-            );
-            comOrderBoxes.add(orderBox);
-          }
-        }
+        final comOrders = snapshot.data?.docs.map(
+          (order) {
+            if (order.get('isUrgent') == true) {
+              OrderBox(
+                userName: order.data().toString().contains('username')
+                    ? order.get('username')
+                    : '',
+                icon: Icons.stacked_line_chart_outlined,
+                uploadPlace: order.data().toString().contains('uploadPlace')
+                    ? order.get('uploadPlace')
+                    : '',
+                downloadPlace: order.data().toString().contains('downloadPlace')
+                    ? order.get('downloadPlace')
+                    : '',
+                uploadTime: order.data().toString().contains('uploadTime')
+                    ? order.get('uploadTime')
+                    : '',
+                transType: order.data().toString().contains('transType')
+                    ? order.get('transType')
+                    : '',
+                orderNum: Provider.of<OrderData>(context).comOrderBoxes.length,
+              );
+            }
+          },
+        ).toList();
+        Provider.of<OrderData>(context).comOrderBoxes = comOrders!;
+
+        Provider.of<OrderData>(context).urgOrderBoxes = urgOrders!;
+
         if (isUrgent) {
           return ListView.builder(
               reverse: true,
-              itemCount: urgOrderBoxes.length,
+              itemCount: Provider.of<OrderData>(context).urgOrderBoxes.length,
               itemBuilder: (BuildContext context, int index) {
-                return urgOrderBoxes[index];
+                return Provider.of<OrderData>(context).urgOrderBoxes[index];
               });
         } else {
           return ListView.builder(
               reverse: true,
-              itemCount: comOrderBoxes.length,
+              itemCount: Provider.of<OrderData>(context).comOrderBoxes.length,
               itemBuilder: (BuildContext context, int index) {
-                return comOrderBoxes[index];
+                return Provider.of<OrderData>(context).comOrderBoxes[index];
               });
         }
       },

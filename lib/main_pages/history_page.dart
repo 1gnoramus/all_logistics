@@ -3,6 +3,12 @@ import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:all_log/components/bottom_data.dart';
 import 'package:all_log/components/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:all_log/components/order_data.dart';
+
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class HistoryPage extends StatefulWidget {
   static String id = 'history_page';
@@ -12,8 +18,6 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  final _auth = FirebaseAuth.instance;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,24 +43,13 @@ class _HistoryPageState extends State<HistoryPage> {
         children: [
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                HistoryPiece(
-                  title: 'Выполненные заказы (0)',
-                  titleColor: Colors.green,
-                  histColor: Colors.greenAccent,
-                  statusText: 'Выполнен',
-                ),
                 HistoryPiece(
                   title: 'Обрабатывается (0)',
                   titleColor: Colors.orange,
                   histColor: Colors.orangeAccent,
                   statusText: 'Обрабатывается',
-                ),
-                HistoryPiece(
-                  title: 'Отмененные заказы (0)',
-                  titleColor: Colors.red,
-                  histColor: Colors.redAccent,
-                  statusText: 'Отменен',
                 ),
               ],
             ),
@@ -82,25 +75,6 @@ class HistoryPiece extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<History> histBoxesList = [
-      History(
-        histColor: histColor,
-        statusText: statusText,
-      ),
-      History(
-        histColor: histColor,
-        statusText: statusText,
-      ),
-      History(
-        histColor: histColor,
-        statusText: statusText,
-      ),
-      History(
-        histColor: histColor,
-        statusText: statusText,
-      ),
-    ];
-
     return Expanded(
       child: Container(
         margin: EdgeInsets.all(10.0),
@@ -117,12 +91,7 @@ class HistoryPiece extends StatelessWidget {
               child: Text(title),
             ),
             Expanded(
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return histBoxesList[index];
-                },
-                itemCount: histBoxesList.length,
-              ),
+              child: HistoryStream(),
             )
           ],
         ),
@@ -132,10 +101,21 @@ class HistoryPiece extends StatelessWidget {
 }
 
 class History extends StatelessWidget {
-  History({required this.histColor, required this.statusText});
+  History({
+    required this.custUserName,
+    required this.uploadPlace,
+    required this.downloadPlace,
+    required this.uploadTime,
+    required this.transType,
+    required this.orderNum,
+  });
 
-  final Color histColor;
-  final String statusText;
+  final String custUserName;
+  final String orderNum;
+  final String uploadTime;
+  final String uploadPlace;
+  final String downloadPlace;
+  final String transType;
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +129,7 @@ class History extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
-              color: histColor,
+              color: Colors.red,
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
@@ -158,7 +138,7 @@ class History extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    'Заказ Номер 337',
+                    'Заказ Номер $orderNum',
                     style: kBottomPanelTextStyle,
                   ),
                 ),
@@ -168,7 +148,7 @@ class History extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Статус: $statusText'),
+                    Text('Заказ: $custUserName'),
                     Text('Дата: 19.02.2001'),
                   ],
                 )
@@ -177,6 +157,58 @@ class History extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class HistoryStream extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('inProcessingOrders').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.redAccent,
+            ),
+          );
+        }
+
+        final histories = snapshot.data?.docs
+            .map((history) => History(
+                  custUserName:
+                      history.data().toString().contains('customerUsername')
+                          ? history.get('customerUsername')
+                          : '',
+                  uploadPlace: history.data().toString().contains('uploadPlace')
+                      ? history.get('uploadPlace')
+                      : '',
+                  downloadPlace:
+                      history.data().toString().contains('downloadPlace')
+                          ? history.get('downloadPlace')
+                          : '',
+                  uploadTime: history.data().toString().contains('uploadTime')
+                      ? history.get('uploadTime')
+                      : '',
+                  transType: history.data().toString().contains('transType')
+                      ? history.get('transType')
+                      : '',
+                  orderNum: history.data().toString().contains('number')
+                      ? history.get('number').toString()
+                      : '',
+                ))
+            .toList();
+
+        Provider.of<OrderData>(context).histBoxesList = histories!;
+
+        return ListView.builder(
+          itemCount: Provider.of<OrderData>(context).histBoxesList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Provider.of<OrderData>(context).histBoxesList[index];
+          },
+        );
+      },
     );
   }
 }
