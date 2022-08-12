@@ -167,76 +167,79 @@ class OrdersStream extends StatelessWidget {
             ),
           );
         }
-        final orders = snapshot.data?.docs;
-        for (var order in orders!) {
-          if (order.get('isUrgent') == true) {
-            final urgOrders = snapshot.data?.docs
-                .map((order) => OrderBox(
-                      userName: order.data().toString().contains('username')
-                          ? order.get('username')
-                          : '',
-                      icon: Icons.stacked_line_chart_outlined,
-                      uploadPlace:
-                          order.data().toString().contains('uploadPlace')
-                              ? order.get('uploadPlace')
-                              : '',
-                      downloadPlace:
-                          order.data().toString().contains('downloadPlace')
-                              ? order.get('downloadPlace')
-                              : '',
-                      uploadTime: order.data().toString().contains('uploadTime')
-                          ? order.get('uploadTime')
-                          : '',
-                      transType: order.data().toString().contains('transType')
-                          ? order.get('transType')
-                          : '',
-                      orderNum:
-                          Provider.of<OrderData>(context).urgOrderBoxes.length,
-                    ))
-                .toList();
-            Provider.of<OrderData>(context).urgOrderBoxes = urgOrders!;
-          } else {
-            final comOrders = snapshot.data?.docs
-                .map((order) => OrderBox(
-                      userName: order.data().toString().contains('username')
-                          ? order.get('username')
-                          : '',
-                      icon: Icons.stacked_line_chart_outlined,
-                      uploadPlace:
-                          order.data().toString().contains('uploadPlace')
-                              ? order.get('uploadPlace')
-                              : '',
-                      downloadPlace:
-                          order.data().toString().contains('downloadPlace')
-                              ? order.get('downloadPlace')
-                              : '',
-                      uploadTime: order.data().toString().contains('uploadTime')
-                          ? order.get('uploadTime')
-                          : '',
-                      transType: order.data().toString().contains('transType')
-                          ? order.get('transType')
-                          : '',
-                      orderNum:
-                          Provider.of<OrderData>(context).comOrderBoxes.length,
-                    ))
-                .toList();
-            Provider.of<OrderData>(context).comOrderBoxes = comOrders!;
-          }
-        }
+        final urgOrders = snapshot.data?.docs.map(
+          (order) {
+            if (order.get('isUrgent')) {
+              return OrderBox(
+                userName: order.data().toString().contains('username')
+                    ? order.get('username')
+                    : '',
+                icon: Icons.stacked_line_chart_outlined,
+                uploadPlace: order.data().toString().contains('uploadPlace')
+                    ? order.get('uploadPlace')
+                    : '',
+                downloadPlace: order.data().toString().contains('downloadPlace')
+                    ? order.get('downloadPlace')
+                    : '',
+                uploadTime: order.data().toString().contains('uploadTime')
+                    ? order.get('uploadTime')
+                    : '',
+                transType: order.data().toString().contains('transType')
+                    ? order.get('transType')
+                    : '',
+                orderNum: Provider.of<OrderData>(context).urgOrderBoxes.length,
+              );
+            }
+          },
+        ).toList();
+        urgOrders!.removeWhere((element) => element == null);
+
+        Provider.of<OrderData>(context).urgOrderBoxes = urgOrders;
+
+        // final comOrders = snapshot.data?.docs.where(order.get('isUrgent') => false).map((e){});
+
+        final comOrders = snapshot.data?.docs.map(
+          (order) {
+            if (order.get('isUrgent') == false) {
+              return OrderBox(
+                userName: order.data().toString().contains('username')
+                    ? order.get('username')
+                    : '',
+                icon: Icons.stacked_line_chart_outlined,
+                uploadPlace: order.data().toString().contains('uploadPlace')
+                    ? order.get('uploadPlace')
+                    : '',
+                downloadPlace: order.data().toString().contains('downloadPlace')
+                    ? order.get('downloadPlace')
+                    : '',
+                uploadTime: order.data().toString().contains('uploadTime')
+                    ? order.get('uploadTime')
+                    : '',
+                transType: order.data().toString().contains('transType')
+                    ? order.get('transType')
+                    : '',
+                orderNum: Provider.of<OrderData>(context).comOrderBoxes.length,
+              );
+            }
+          },
+        ).toList();
+        comOrders!.removeWhere((element) => element == null);
+        Provider.of<OrderData>(context).comOrderBoxes = comOrders;
+
         if (isUrgent) {
           return ListView.builder(
-              reverse: true,
-              itemCount: Provider.of<OrderData>(context).urgOrderBoxes.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Provider.of<OrderData>(context).urgOrderBoxes[index];
-              });
+            itemCount: Provider.of<OrderData>(context).urgOrderBoxes.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Provider.of<OrderData>(context).urgOrderBoxes[index];
+            },
+          );
         } else {
           return ListView.builder(
-              reverse: true,
-              itemCount: Provider.of<OrderData>(context).comOrderBoxes.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Provider.of<OrderData>(context).comOrderBoxes[index];
-              });
+            itemCount: Provider.of<OrderData>(context).comOrderBoxes.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Provider.of<OrderData>(context).comOrderBoxes[index];
+            },
+          );
         }
       },
     );

@@ -79,7 +79,7 @@ class _OrderPageState extends State<OrderPage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  var typedData = await Navigator.push(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
