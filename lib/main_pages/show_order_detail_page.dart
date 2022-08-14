@@ -29,6 +29,7 @@ class ShowOrderDetailPage extends StatelessWidget {
     required this.uploadTime,
     required this.transType,
     required this.orderNum,
+    required this.orderId,
   });
 
   final int orderNum;
@@ -38,6 +39,7 @@ class ShowOrderDetailPage extends StatelessWidget {
   final String uploadPlace;
   final String downloadPlace;
   final String transType;
+  final String orderId;
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +90,9 @@ class ShowOrderDetailPage extends StatelessWidget {
             ),
             FlatButton(
               color: Colors.lightBlueAccent,
-              onPressed: () {
-                _firestore.collection('inProcessingOrders').add({
+              onPressed: () async {
+                var docRef =
+                    await _firestore.collection('inProcessingOrders').add({
                   'downloadPlace': downloadPlace,
                   'uploadPlace': uploadPlace,
                   'uploadTime': uploadTime,
@@ -97,7 +100,10 @@ class ShowOrderDetailPage extends StatelessWidget {
                   'customerUsername': userName,
                   'executorUsername': loggedinUser.email,
                   'number': orderNum,
+                  'orderId': orderId,
                 });
+                var documentId = docRef.id;
+                print(documentId);
                 Navigator.pushNamed(context, HistoryPage.id);
               },
               child: Text(
@@ -108,8 +114,13 @@ class ShowOrderDetailPage extends StatelessWidget {
             FlatButton(
               color: Colors.lightGreenAccent,
               onPressed: () async {
-                final path = await _firestore.collection('Orders').doc().path;
-                print(path);
+                var collection = _firestore.collection('Orders');
+                var querySnapshots = await collection.get();
+                for (var snapshots in querySnapshots.docs) {
+                  var documentID = snapshots.id;
+                  print(documentID);
+// <-- Document ID
+                }
               },
               child: Text(
                 'Связаться с грузополучателем',
@@ -119,9 +130,10 @@ class ShowOrderDetailPage extends StatelessWidget {
             FlatButton(
               color: Colors.redAccent,
               onPressed: () {
+                print(orderId);
                 _firestore
                     .collection('Orders')
-                    .doc('xrRo1Zfp0R474Z7gApvt')
+                    .doc(orderId.toString())
                     .delete()
                     .then(
                       (doc) => print("Document deleted"),

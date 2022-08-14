@@ -129,6 +129,12 @@ class _NewOrderPageState extends State<NewOrderPage> {
                           .ordersIDList
                           .length,
                     });
+                    var documentId = order.id;
+                    print(documentId);
+                    _firestore
+                        .collection('Orders')
+                        .doc(documentId)
+                        .set({'orderId': documentId}, SetOptions(merge: true));
                     Provider.of<OrderData>(context, listen: false)
                         .ordersIDList
                         .add(order);

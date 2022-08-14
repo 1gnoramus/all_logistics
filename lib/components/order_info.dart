@@ -11,16 +11,16 @@ final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
 
 class OrderBox extends StatelessWidget {
-  OrderBox({
-    required this.userName,
-    required this.icon,
-    required this.uploadPlace,
-    required this.downloadPlace,
-    required this.uploadTime,
-    required this.transType,
-    required this.orderNum,
-    required this.orderStatus,
-  });
+  OrderBox(
+      {required this.userName,
+      required this.icon,
+      required this.uploadPlace,
+      required this.downloadPlace,
+      required this.uploadTime,
+      required this.transType,
+      required this.orderNum,
+      required this.orderStatus,
+      required this.orderId});
 
   final String userName;
   final int orderNum;
@@ -31,6 +31,7 @@ class OrderBox extends StatelessWidget {
   final String downloadPlace;
   final String transType;
   final String orderStatus;
+  final String orderId;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,7 @@ class OrderBox extends StatelessWidget {
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
                         child: ShowOrderDetailPage(
+                          orderId: orderId,
                           uploadPlace: uploadPlace,
                           downloadPlace: downloadPlace,
                           uploadTime: uploadTime,
@@ -193,6 +195,9 @@ class OrdersStream extends StatelessWidget {
                     ? order.get('orderNum')
                     : '',
                 orderStatus: 'InProcess',
+                orderId: order.data().toString().contains('orderId')
+                    ? order.get('orderId')
+                    : '',
               );
             }
           },
@@ -225,6 +230,9 @@ class OrdersStream extends StatelessWidget {
                     ? order.get('orderNum')
                     : '',
                 orderStatus: 'InProcess',
+                orderId: order.data().toString().contains('orderId')
+                    ? order.get('orderId')
+                    : '',
               );
             }
           },

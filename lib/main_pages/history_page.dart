@@ -139,6 +139,7 @@ class History extends StatelessWidget {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: ShowOrderDetailPage(
+                orderId: '',
                 uploadPlace: uploadPlace,
                 downloadPlace: downloadPlace,
                 uploadTime: uploadTime,
