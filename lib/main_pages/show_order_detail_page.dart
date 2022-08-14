@@ -107,9 +107,30 @@ class ShowOrderDetailPage extends StatelessWidget {
             ),
             FlatButton(
               color: Colors.lightGreenAccent,
-              onPressed: () {},
+              onPressed: () async {
+                final path = await _firestore.collection('Orders').doc().path;
+                print(path);
+              },
               child: Text(
                 'Связаться с грузополучателем',
+                style: TextStyle(color: Colors.black54),
+              ),
+            ),
+            FlatButton(
+              color: Colors.redAccent,
+              onPressed: () {
+                _firestore
+                    .collection('Orders')
+                    .doc('xrRo1Zfp0R474Z7gApvt')
+                    .delete()
+                    .then(
+                      (doc) => print("Document deleted"),
+                      onError: (e) => print("Error updating document $e"),
+                    );
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Отменить запрос',
                 style: TextStyle(color: Colors.black54),
               ),
             ),

@@ -6,6 +6,8 @@ import 'package:all_log/components/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:all_log/components/order_data.dart';
+import 'show_order_detail_page.dart';
+import 'dart:convert';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -46,9 +48,19 @@ class _HistoryPageState extends State<HistoryPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 HistoryPiece(
-                  title: 'Обрабатывается (0)',
+                  title: 'Приняты в работу:',
+                  titleColor: Colors.green,
+                  statusText: 'Обрабатывается',
+                ),
+                HistoryPiece(
+                  title:
+                      'Обрабатывается : (${Provider.of<OrderData>(context).inProcHistList.length})',
                   titleColor: Colors.orange,
-                  histColor: Colors.orangeAccent,
+                  statusText: 'Обрабатывается',
+                ),
+                HistoryPiece(
+                  title: 'Отмененные',
+                  titleColor: Colors.red,
                   statusText: 'Обрабатывается',
                 ),
               ],
@@ -65,12 +77,9 @@ class HistoryPiece extends StatelessWidget {
   HistoryPiece(
       {required this.title,
       required this.titleColor,
-      required this.histColor,
       required this.statusText});
   final String title;
   final Color titleColor;
-  final Color histColor;
-
   final String statusText;
 
   @override
@@ -108,6 +117,7 @@ class History extends StatelessWidget {
     required this.uploadTime,
     required this.transType,
     required this.orderNum,
+    required this.histColor,
   });
 
   final String custUserName;
@@ -116,11 +126,31 @@ class History extends StatelessWidget {
   final String uploadPlace;
   final String downloadPlace;
   final String transType;
+  final Color histColor;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: ShowOrderDetailPage(
+                uploadPlace: uploadPlace,
+                downloadPlace: downloadPlace,
+                uploadTime: uploadTime,
+                transType: transType,
+                userName: 'userName',
+                icon: Icons.add,
+                orderNum: int.parse(orderNum),
+              ),
+            ),
+          ),
+        );
+      },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
         child: Material(
@@ -129,7 +159,7 @@ class History extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
-              color: Colors.red,
+              color: histColor,
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
@@ -197,15 +227,16 @@ class HistoryStream extends StatelessWidget {
                   orderNum: history.data().toString().contains('number')
                       ? history.get('number').toString()
                       : '',
+                  histColor: Colors.blue,
                 ))
             .toList();
 
-        Provider.of<OrderData>(context).histBoxesList = histories!;
+        Provider.of<OrderData>(context).inProcHistList = histories!;
 
         return ListView.builder(
-          itemCount: Provider.of<OrderData>(context).histBoxesList.length,
+          itemCount: Provider.of<OrderData>(context).inProcHistList.length,
           itemBuilder: (BuildContext context, int index) {
-            return Provider.of<OrderData>(context).histBoxesList[index];
+            return Provider.of<OrderData>(context).inProcHistList[index];
           },
         );
       },

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:all_log/components/bottom_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:all_log/components/order_data.dart';
 
 class NewOrderPage extends StatefulWidget {
-  const NewOrderPage({Key? key}) : super(key: key);
-
   @override
   State<NewOrderPage> createState() => _NewOrderPageState();
 }
@@ -26,12 +26,6 @@ class _NewOrderPageState extends State<NewOrderPage> {
     }
   }
 
-  void ordersStream() async {
-    await for (var snapshot in _firestore.collection('orders').snapshots()) {
-      for (var order in snapshot.docs) {}
-    }
-  }
-
   String uploadPlace = 'None';
   String downloadPlace = 'None';
   String uploadTime = 'None';
@@ -48,6 +42,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    int orderNum = _firestore.collection('Orders').hashCode;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -122,17 +117,22 @@ class _NewOrderPageState extends State<NewOrderPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    _firestore.collection('orders').add({
+                  onTap: () async {
+                    final order = await _firestore.collection('Orders').add({
                       'downloadPlace': downloadPlace,
                       'uploadPlace': uploadPlace,
                       'uploadTime': uploadTime,
                       'isUrgent': isUrgent,
                       'transType': transType,
-                      'username': loggedinUser.email
+                      'username': loggedinUser.email,
+                      'orderNum': Provider.of<OrderData>(context, listen: false)
+                          .ordersIDList
+                          .length,
                     });
+                    Provider.of<OrderData>(context, listen: false)
+                        .ordersIDList
+                        .add(order);
                     Navigator.pop(context, inputData);
-                    print(inputData);
                     inputData['isUrgent'] = isUrgent;
                   },
                   child: Container(

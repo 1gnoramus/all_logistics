@@ -19,6 +19,7 @@ class OrderBox extends StatelessWidget {
     required this.uploadTime,
     required this.transType,
     required this.orderNum,
+    required this.orderStatus,
   });
 
   final String userName;
@@ -29,6 +30,7 @@ class OrderBox extends StatelessWidget {
   final String uploadPlace;
   final String downloadPlace;
   final String transType;
+  final String orderStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +160,7 @@ class OrdersStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('orders').snapshots(),
+      stream: _firestore.collection('Orders').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -187,7 +189,10 @@ class OrdersStream extends StatelessWidget {
                 transType: order.data().toString().contains('transType')
                     ? order.get('transType')
                     : '',
-                orderNum: Provider.of<OrderData>(context).urgOrderBoxes.length,
+                orderNum: order.data().toString().contains('orderNum')
+                    ? order.get('orderNum')
+                    : '',
+                orderStatus: 'InProcess',
               );
             }
           },
@@ -195,8 +200,6 @@ class OrdersStream extends StatelessWidget {
         urgOrders!.removeWhere((element) => element == null);
 
         Provider.of<OrderData>(context).urgOrderBoxes = urgOrders;
-
-        // final comOrders = snapshot.data?.docs.where(order.get('isUrgent') => false).map((e){});
 
         final comOrders = snapshot.data?.docs.map(
           (order) {
@@ -218,7 +221,10 @@ class OrdersStream extends StatelessWidget {
                 transType: order.data().toString().contains('transType')
                     ? order.get('transType')
                     : '',
-                orderNum: Provider.of<OrderData>(context).comOrderBoxes.length,
+                orderNum: order.data().toString().contains('orderNum')
+                    ? order.get('orderNum')
+                    : '',
+                orderStatus: 'InProcess',
               );
             }
           },
