@@ -14,6 +14,7 @@ final _firestore = FirebaseFirestore.instance;
 
 class HistoryPage extends StatefulWidget {
   static String id = 'history_page';
+  String status = '';
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
@@ -48,19 +49,22 @@ class _HistoryPageState extends State<HistoryPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 HistoryPiece(
+                  status: '0',
                   title: 'Приняты в работу:',
                   titleColor: Colors.green,
                   statusText: 'Обрабатывается',
                 ),
                 HistoryPiece(
+                  status: '1',
                   title:
                       'Обрабатывается : (${Provider.of<OrderData>(context).inProcHistList.length})',
                   titleColor: Colors.orange,
                   statusText: 'Обрабатывается',
                 ),
                 HistoryPiece(
+                  status: '2',
                   title: 'Отмененные',
-                  titleColor: Colors.red,
+                  titleColor: Colors.red.shade700,
                   statusText: 'Обрабатывается',
                 ),
               ],
@@ -76,11 +80,13 @@ class _HistoryPageState extends State<HistoryPage> {
 class HistoryPiece extends StatelessWidget {
   HistoryPiece(
       {required this.title,
+      required this.status,
       required this.titleColor,
       required this.statusText});
   final String title;
   final Color titleColor;
   final String statusText;
+  final String status;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +106,7 @@ class HistoryPiece extends StatelessWidget {
               child: Text(title),
             ),
             Expanded(
-              child: HistoryStream(),
+              child: HistoryStream(status),
             )
           ],
         ),
@@ -117,7 +123,7 @@ class History extends StatelessWidget {
     required this.uploadTime,
     required this.transType,
     required this.orderNum,
-    required this.histColor,
+    required this.status,
   });
 
   final String custUserName;
@@ -126,7 +132,7 @@ class History extends StatelessWidget {
   final String uploadPlace;
   final String downloadPlace;
   final String transType;
-  final Color histColor;
+  final String status;
 
   @override
   Widget build(BuildContext context) {
@@ -138,15 +144,73 @@ class History extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: ShowOrderDetailPage(
-                orderId: '',
-                uploadPlace: uploadPlace,
-                downloadPlace: downloadPlace,
-                uploadTime: uploadTime,
-                transType: transType,
-                userName: 'userName',
-                icon: Icons.add,
-                orderNum: int.parse(orderNum),
+              child: Container(
+                color: Color(0xff757575),
+                child: Container(
+                  padding: EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        "Заявка № $orderNum",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20.0, color: Colors.black54),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Icon(
+                                Icons.abc,
+                                size: 100.0,
+                                color: Colors.red,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.yellow,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                            ),
+                            SizedBox(
+                              width: 20.0,
+                            ),
+                            Text(
+                              "Место отгрузки: $uploadPlace \nМесто выгрузки: $downloadPlace \nВремя отгрузки: $uploadTime \nТип транспорта: $transType",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 15.0, color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                      FlatButton(
+                        color: Colors.lightGreenAccent,
+                        onPressed: () async {
+                          print(status);
+                        },
+                        child: Text(
+                          'Принять запрос',
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      ),
+                      FlatButton(
+                        color: Colors.redAccent,
+                        onPressed: () async {},
+                        child: Text(
+                          'Отклонить запрос',
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -160,7 +224,13 @@ class History extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
-              color: histColor,
+              color: status == '0'
+                  ? Colors.lightGreen
+                  : status == '1'
+                      ? Colors.orangeAccent
+                      : status == '2'
+                          ? Colors.redAccent
+                          : Colors.blue,
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
@@ -193,6 +263,9 @@ class History extends StatelessWidget {
 }
 
 class HistoryStream extends StatelessWidget {
+  HistoryStream(this.status);
+  final String status;
+  List currentHistList = [];
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -228,7 +301,7 @@ class HistoryStream extends StatelessWidget {
                   orderNum: history.data().toString().contains('number')
                       ? history.get('number').toString()
                       : '',
-                  histColor: Colors.blue,
+                  status: status,
                 ))
             .toList();
 
