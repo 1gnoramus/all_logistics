@@ -6,23 +6,34 @@ import 'package:all_log/components/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:all_log/components/order_data.dart';
-import 'show_order_detail_page.dart';
-import 'dart:convert';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
+late User loggedinUser;
 
 class HistoryPage extends StatefulWidget {
   static String id = 'history_page';
-  String status = '';
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedinUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+    ;
+  }
+
   @override
   Widget build(BuildContext context) {
+    getCurrentUser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -106,7 +117,11 @@ class HistoryPiece extends StatelessWidget {
               child: Text(title),
             ),
             Expanded(
-              child: HistoryStream(status),
+              child: status == '0'
+                  ? AcceptedHistoryStream()
+                  : status == '1'
+                      ? HistoryStream()
+                      : RejectedHistoryStream(),
             )
           ],
         ),
@@ -123,16 +138,20 @@ class History extends StatelessWidget {
     required this.uploadTime,
     required this.transType,
     required this.orderNum,
+    required this.orderId,
     required this.status,
+    required this.color,
   });
 
   final String custUserName;
   final String orderNum;
+  final String orderId;
   final String uploadTime;
   final String uploadPlace;
   final String downloadPlace;
   final String transType;
   final String status;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -192,8 +211,28 @@ class History extends StatelessWidget {
                       ),
                       FlatButton(
                         color: Colors.lightGreenAccent,
-                        onPressed: () async {
-                          print(status);
+                        onPressed: () {
+                          print(orderId);
+                          _firestore.collection('acceptedOrders').add({
+                            'downloadPlace': downloadPlace,
+                            'uploadPlace': uploadPlace,
+                            'uploadTime': uploadTime,
+                            'transType': transType,
+                            'customerUsername': custUserName,
+                            'executorUsername': loggedinUser.email,
+                            'number': orderNum,
+                            'orderId': orderId,
+                          });
+                          _firestore
+                              .collection('inProcessingOrders')
+                              .doc(orderId.toString())
+                              .delete()
+                              .then(
+                                (doc) => print("Document deleted"),
+                                onError: (e) =>
+                                    print("Error updating document $e"),
+                              );
+                          Navigator.pop(context);
                         },
                         child: Text(
                           'Принять запрос',
@@ -202,7 +241,28 @@ class History extends StatelessWidget {
                       ),
                       FlatButton(
                         color: Colors.redAccent,
-                        onPressed: () async {},
+                        onPressed: () {
+                          _firestore.collection('rejectedOrders').add({
+                            'downloadPlace': downloadPlace,
+                            'uploadPlace': uploadPlace,
+                            'uploadTime': uploadTime,
+                            'transType': transType,
+                            'customerUsername': custUserName,
+                            'executorUsername': loggedinUser.email,
+                            'number': orderNum,
+                            'orderId': orderId,
+                          });
+                          _firestore
+                              .collection('inProcessingOrders')
+                              .doc(orderId.toString())
+                              .delete()
+                              .then(
+                                (doc) => print("Document deleted"),
+                                onError: (e) =>
+                                    print("Error updating document $e"),
+                              );
+                          Navigator.pop(context);
+                        },
                         child: Text(
                           'Отклонить запрос',
                           style: TextStyle(color: Colors.black54),
@@ -224,13 +284,7 @@ class History extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
-              color: status == '0'
-                  ? Colors.lightGreen
-                  : status == '1'
-                      ? Colors.orangeAccent
-                      : status == '2'
-                          ? Colors.redAccent
-                          : Colors.blue,
+              color: color,
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
@@ -263,9 +317,6 @@ class History extends StatelessWidget {
 }
 
 class HistoryStream extends StatelessWidget {
-  HistoryStream(this.status);
-  final String status;
-  List currentHistList = [];
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -301,7 +352,11 @@ class HistoryStream extends StatelessWidget {
                   orderNum: history.data().toString().contains('number')
                       ? history.get('number').toString()
                       : '',
-                  status: status,
+                  status: '',
+                  orderId: history.data().toString().contains('orderId')
+                      ? history.get('orderId').toString()
+                      : '',
+                  color: Colors.orangeAccent,
                 ))
             .toList();
 
@@ -311,6 +366,120 @@ class HistoryStream extends StatelessWidget {
           itemCount: Provider.of<OrderData>(context).inProcHistList.length,
           itemBuilder: (BuildContext context, int index) {
             return Provider.of<OrderData>(context).inProcHistList[index];
+          },
+        );
+      },
+    );
+  }
+}
+
+class AcceptedHistoryStream extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('acceptedOrders').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.redAccent,
+            ),
+          );
+        }
+
+        final histories = snapshot.data?.docs
+            .map((history) => History(
+                  custUserName:
+                      history.data().toString().contains('customerUsername')
+                          ? history.get('customerUsername')
+                          : '',
+                  uploadPlace: history.data().toString().contains('uploadPlace')
+                      ? history.get('uploadPlace')
+                      : '',
+                  downloadPlace:
+                      history.data().toString().contains('downloadPlace')
+                          ? history.get('downloadPlace')
+                          : '',
+                  uploadTime: history.data().toString().contains('uploadTime')
+                      ? history.get('uploadTime')
+                      : '',
+                  transType: history.data().toString().contains('transType')
+                      ? history.get('transType')
+                      : '',
+                  orderNum: history.data().toString().contains('number')
+                      ? history.get('number').toString()
+                      : '',
+                  status: '',
+                  orderId: history.data().toString().contains('orderID')
+                      ? history.get('orderID').toString()
+                      : '',
+                  color: Colors.green,
+                ))
+            .toList();
+
+        Provider.of<OrderData>(context).acceptedHistList = histories!;
+
+        return ListView.builder(
+          itemCount: Provider.of<OrderData>(context).acceptedHistList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Provider.of<OrderData>(context).acceptedHistList[index];
+          },
+        );
+      },
+    );
+  }
+}
+
+class RejectedHistoryStream extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('rejectedOrders').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.redAccent,
+            ),
+          );
+        }
+
+        final histories = snapshot.data?.docs
+            .map((history) => History(
+                  custUserName:
+                      history.data().toString().contains('customerUsername')
+                          ? history.get('customerUsername')
+                          : '',
+                  uploadPlace: history.data().toString().contains('uploadPlace')
+                      ? history.get('uploadPlace')
+                      : '',
+                  downloadPlace:
+                      history.data().toString().contains('downloadPlace')
+                          ? history.get('downloadPlace')
+                          : '',
+                  uploadTime: history.data().toString().contains('uploadTime')
+                      ? history.get('uploadTime')
+                      : '',
+                  transType: history.data().toString().contains('transType')
+                      ? history.get('transType')
+                      : '',
+                  orderNum: history.data().toString().contains('number')
+                      ? history.get('number').toString()
+                      : '',
+                  status: '',
+                  orderId: history.data().toString().contains('orderID')
+                      ? history.get('orderID').toString()
+                      : '',
+                  color: Colors.redAccent,
+                ))
+            .toList();
+
+        Provider.of<OrderData>(context).rejectedHistList = histories!;
+
+        return ListView.builder(
+          itemCount: Provider.of<OrderData>(context).rejectedHistList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Provider.of<OrderData>(context).rejectedHistList[index];
           },
         );
       },

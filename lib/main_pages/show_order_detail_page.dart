@@ -103,6 +103,10 @@ class ShowOrderDetailPage extends StatelessWidget {
                   'orderId': orderId,
                 });
                 var documentId = docRef.id;
+                _firestore
+                    .collection('inProcessingOrders')
+                    .doc(documentId)
+                    .update({'orderId': documentId});
                 print(documentId);
                 Navigator.pushNamed(context, HistoryPage.id);
               },

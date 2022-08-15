@@ -5,6 +5,8 @@ import '../components/order_info.dart';
 import '../components/bottom_data.dart';
 import 'package:all_log/components/order_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:all_log/components/order_data.dart';
 
 String uploadPlace = '';
 String downloadPlace = '';
@@ -75,7 +77,7 @@ class _OrderPageState extends State<OrderPage> {
             children: [
               OrderType(
                 Colors.red,
-                'Срочные: (0)',
+                'Срочные: (${Provider.of<OrderData>(context).urgOrderBoxes.length})',
               ),
               GestureDetector(
                 onTap: () async {
@@ -127,7 +129,7 @@ class _OrderPageState extends State<OrderPage> {
             children: [
               OrderType(
                 Colors.green,
-                'Обычные : (0)',
+                'Обычные : (${Provider.of<OrderData>(context).comOrderBoxes.length})',
               ),
               GestureDetector(
                 onTap: () async {
