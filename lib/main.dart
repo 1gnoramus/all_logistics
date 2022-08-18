@@ -1,4 +1,5 @@
 import 'package:all_log/components/order_data.dart';
+import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,7 @@ class AllLogistics extends StatelessWidget {
           scaffoldBackgroundColor: Color(0xFFE9FB47),
         ),
         routes: {
+          LoadingScreen.id: (context) => LoadingScreen(),
           ProfilePage.id: (context) => ProfilePage(),
           HistoryPage.id: (context) => HistoryPage(),
           InfoPage.id: (context) => InfoPage(),

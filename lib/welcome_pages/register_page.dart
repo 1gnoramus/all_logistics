@@ -1,4 +1,5 @@
 import 'package:all_log/main_pages/order_page.dart';
+import 'package:all_log/welcome_pages/loading_screen.dart';
 import '../components/rounded button.dart';
 import 'package:flutter/material.dart';
 import '../components/constants.dart';
@@ -87,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email, password: password);
                     if (newUser != null) {
-                      Navigator.pushNamed(context, OrderPage.id);
+                      Navigator.pushNamed(context, LoadingScreen.id);
                     }
 
                     setState(() {

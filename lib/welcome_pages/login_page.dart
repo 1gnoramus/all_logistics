@@ -1,4 +1,5 @@
-import 'package:all_log/main_pages/order_page.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:all_log/welcome_pages/loading_screen.dart';
 import '../components/rounded button.dart';
 import 'package:flutter/material.dart';
 import '../components/constants.dart';
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
                     if (user != null) {
-                      Navigator.pushNamed(context, OrderPage.id);
+                      Navigator.pushNamed(context, LoadingScreen.id);
                     } else {}
                     setState(() {
                       showSpinner = false;
@@ -96,7 +97,22 @@ class _LoginPageState extends State<LoginPage> {
                     setState(() {
                       showSpinner = false;
                     });
-                    print('Пароль неправильный, еблан');
+                    Alert(
+                      context: context,
+                      type: AlertType.error,
+                      title: "Пароль неверный. Ну или почта, хз",
+                      desc: "Вынь свои глаза из жёпы и введи пароль правильно",
+                      buttons: [
+                        DialogButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            'Попробовать еще раз',
+                            style:
+                                TextStyle(color: Colors.black38, fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ).show();
                   }
                 },
               ),
