@@ -21,14 +21,18 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   void getLocation() async {
     Location location = Location();
+    await location.getCurrentLocation();
     latitude = location.latitude;
     longitude = location.longitude;
 
-    await location.getCurrentLocation();
-    print(latitude);
-    print(longitude);
-
-    Navigator.pushNamed(context, OrderPage.id);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return OrderPage();
+        },
+      ),
+    );
   }
 
   @override
