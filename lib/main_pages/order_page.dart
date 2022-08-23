@@ -7,6 +7,7 @@ import 'package:all_log/components/order_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:all_log/components/order_data.dart';
+import 'package:all_log/services/location.dart';
 
 String uploadPlace = '';
 String downloadPlace = '';
@@ -43,13 +44,20 @@ class _OrderPageState extends State<OrderPage> {
   String uploadTime = '';
   String transpType = '';
   bool isUrgent = false;
+  String? countryName;
 
   NewOrderPage newOrderPage = NewOrderPage();
 
+  void getCountryName() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+    countryName = location.countryName;
+  }
+
   @override
   void initState() {
+    getCountryName();
     super.initState();
-    getCurrentUser();
   }
 
   @override
@@ -59,12 +67,25 @@ class _OrderPageState extends State<OrderPage> {
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         actions: [
+          Center(
+            child: Text(
+              '$countryName',
+              style: TextStyle(fontSize: 20.0, color: Colors.yellow),
+            ),
+          ),
+          GestureDetector(
+            child: Icon(Icons.location_on),
+            onTap: () async {
+              countryName = await Location().getCurrentLocation().toString();
+            },
+          ),
           IconButton(
-              onPressed: () {
-                _auth.signOut();
-                Navigator.pushNamed(context, WelcomePage.id);
-              },
-              icon: Icon(Icons.logout))
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pushNamed(context, WelcomePage.id);
+            },
+            icon: Icon(Icons.logout),
+          ),
         ],
         title: Text('Order Page'),
       ),

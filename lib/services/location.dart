@@ -4,6 +4,7 @@ import 'package:geocoding/geocoding.dart';
 class Location {
   double latitude = 0.0;
   double longitude = 0.0;
+  String? countryName;
 
   Future<void> getCurrentLocation() async {
     LocationPermission permission;
@@ -14,12 +15,11 @@ class Location {
 
       longitude = position.longitude;
       latitude = position.latitude;
-      print('latitude: $latitude');
-      print('longitude: $longitude');
 
       List<Placemark> placemarks =
-          await placemarkFromCoordinates(52.2165157, 6.9437819);
-      print('City: ${placemarks[0]}');
+          await placemarkFromCoordinates(latitude, longitude);
+      print(placemarks[0].country);
+      countryName = placemarks[0].country.toString();
     } catch (e) {
       print(e);
     }
