@@ -1,3 +1,4 @@
+import 'package:all_log/components/constants.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'new_order_page.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:all_log/components/order_data.dart';
 import 'package:all_log/services/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final _firestore = FirebaseFirestore.instance;
 
 String uploadPlace = '';
 String downloadPlace = '';
@@ -15,9 +19,9 @@ String uploadTime = '';
 String transpType = '';
 
 class OrderPage extends StatefulWidget {
+  OrderPage({this.logOrder, this.locationInfo});
   static String id = 'order_page';
-  OrderPage({this.logOrder});
-
+  final locationInfo;
   final logOrder;
 
   @override
@@ -44,19 +48,18 @@ class _OrderPageState extends State<OrderPage> {
   String uploadTime = '';
   String transpType = '';
   bool isUrgent = false;
-  String? countryName;
+  String countryName = 'Russia';
 
   NewOrderPage newOrderPage = NewOrderPage();
+  Location location = Location();
 
-  void getCountryName() async {
-    Location location = Location();
-    await location.getCurrentLocation();
-    countryName = location.countryName;
+  void getLocationInfo() async {
+    dynamic locationInfo = await _firestore.collection('usersInfo').snapshots();
+    countryName = locationInfo;
   }
 
   @override
   void initState() {
-    getCountryName();
     super.initState();
   }
 
@@ -75,9 +78,7 @@ class _OrderPageState extends State<OrderPage> {
           ),
           GestureDetector(
             child: Icon(Icons.location_on),
-            onTap: () async {
-              countryName = await Location().getCurrentLocation().toString();
-            },
+            onTap: () async {},
           ),
           IconButton(
             onPressed: () {

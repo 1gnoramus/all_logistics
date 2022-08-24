@@ -22,6 +22,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void getLocation() async {
     Location location = Location();
     await location.getCurrentLocation();
+    var locationInfo = await location.getLocationInfo();
     latitude = location.latitude;
     longitude = location.longitude;
 
@@ -29,7 +30,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return OrderPage();
+          return OrderPage(
+            locationInfo: locationInfo,
+          );
         },
       ),
     );
