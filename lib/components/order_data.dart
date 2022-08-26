@@ -8,4 +8,5 @@ class OrderData extends ChangeNotifier {
   List acceptedHistList = [];
   List rejectedHistList = [];
   List ordersIDList = [];
+  List userInfo = [];
 }

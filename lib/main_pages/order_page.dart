@@ -1,4 +1,5 @@
 import 'package:all_log/components/constants.dart';
+import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'new_order_page.dart';
 import 'package:flutter/material.dart';
@@ -51,12 +52,7 @@ class _OrderPageState extends State<OrderPage> {
   String countryName = 'Russia';
 
   NewOrderPage newOrderPage = NewOrderPage();
-  Location location = Location();
-
-  void getLocationInfo() async {
-    dynamic locationInfo = await _firestore.collection('usersInfo').snapshots();
-    countryName = locationInfo;
-  }
+  LoadingScreen location = LoadingScreen();
 
   @override
   void initState() {
@@ -72,13 +68,15 @@ class _OrderPageState extends State<OrderPage> {
         actions: [
           Center(
             child: Text(
-              '$countryName',
+              '${Provider.of<OrderData>(context).userInfo[0].country}',
               style: TextStyle(fontSize: 20.0, color: Colors.yellow),
             ),
           ),
           GestureDetector(
             child: Icon(Icons.location_on),
-            onTap: () async {},
+            onTap: () {
+              print(Provider.of<OrderData>(context).userInfo[0]);
+            },
           ),
           IconButton(
             onPressed: () {
