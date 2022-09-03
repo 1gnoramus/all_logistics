@@ -1,4 +1,3 @@
-import 'package:all_log/components/constants.dart';
 import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'new_order_page.dart';
@@ -9,10 +8,7 @@ import 'package:all_log/components/order_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:all_log/components/order_data.dart';
-import 'package:all_log/services/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-final _firestore = FirebaseFirestore.instance;
 
 String uploadPlace = '';
 String downloadPlace = '';
@@ -49,10 +45,21 @@ class _OrderPageState extends State<OrderPage> {
   String uploadTime = '';
   String transpType = '';
   bool isUrgent = false;
-  String countryName = 'Russia';
+  String countryName = 'Russ';
 
   NewOrderPage newOrderPage = NewOrderPage();
   LoadingScreen location = LoadingScreen();
+
+  void updateLocation(dynamic locationData) {
+    setState(() {
+      if (locationData == null) {
+        countryName = 'Unknown';
+        return;
+      }
+      print('sdasda$locationData');
+      countryName = locationData[0].country.toString();
+    });
+  }
 
   @override
   void initState() {
@@ -61,6 +68,8 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    updateLocation(Provider.of<OrderData>(context).userInfo);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -68,15 +77,13 @@ class _OrderPageState extends State<OrderPage> {
         actions: [
           Center(
             child: Text(
-              '${Provider.of<OrderData>(context).userInfo[0].country}',
+              countryName,
               style: TextStyle(fontSize: 20.0, color: Colors.yellow),
             ),
           ),
           GestureDetector(
             child: Icon(Icons.location_on),
-            onTap: () {
-              print(Provider.of<OrderData>(context).userInfo[0]);
-            },
+            onTap: () {},
           ),
           IconButton(
             onPressed: () {

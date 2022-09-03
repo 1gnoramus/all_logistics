@@ -24,6 +24,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
       await location.getCurrentLocation();
       latitude = location.latitude;
       longitude = location.longitude;
+
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
+      Provider.of<OrderData>(context, listen: false).userInfo = placemarks;
+      countryName = placemarks[0].country.toString();
+      cityName = placemarks[0].locality.toString();
     } catch (e) {
       print(e);
     }
@@ -32,34 +38,23 @@ class _LoadingScreenState extends State<LoadingScreen> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return OrderPage();
+          return OrderPage(
+            locationInfo: Provider.of<OrderData>(context).userInfo,
+          );
         },
       ),
     );
   }
 
-  void getLocationInfo() async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latitude, longitude);
-      Provider.of<OrderData>(context, listen: false).userInfo.clear();
-      Provider.of<OrderData>(context, listen: false).userInfo = placemarks;
-      countryName = placemarks[0].country.toString();
-      cityName = placemarks[0].locality.toString();
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   void initState() {
-    getLocation();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    getLocationInfo();
+    getLocation();
+
     return Scaffold(
       body: Center(
         child: SpinKitDoubleBounce(
