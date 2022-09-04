@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:all_log/components/constants.dart';
+import 'package:all_log/components/colourful_button.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:all_log/components/order_data.dart';
@@ -160,26 +160,22 @@ class AcceptedHistory extends StatelessWidget {
                             ],
                           ),
                         ),
-                        FlatButton(
-                          color: Colors.lightBlueAccent,
-                          onPressed: () {
-                            print(orderId);
-                            _firestore
-                                .collection('acceptedOrders')
-                                .doc(orderId.toString())
-                                .delete()
-                                .then(
-                                  (doc) => print("Document deleted"),
-                                  onError: (e) =>
-                                      print("Error updating document $e"),
-                                );
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Завершить запрос',
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                        ),
+                        ColourfulButton(
+                            buttonColor: Colors.lightBlueAccent,
+                            onTap: () {
+                              print(orderId);
+                              _firestore
+                                  .collection('acceptedOrders')
+                                  .doc(orderId.toString())
+                                  .delete()
+                                  .then(
+                                    (doc) => print("Document deleted"),
+                                    onError: (e) =>
+                                        print("Error updating document $e"),
+                                  );
+                              Navigator.pop(context);
+                            },
+                            buttonText: 'Завершить запрос')
                       ],
                     ),
                   ),

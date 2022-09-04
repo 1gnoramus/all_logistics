@@ -1,3 +1,4 @@
+import 'package:all_log/components/colourful_button.dart';
 import 'package:all_log/main_pages/history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -88,9 +89,9 @@ class ShowOrderDetailPage extends StatelessWidget {
                 ],
               ),
             ),
-            FlatButton(
-              color: Colors.lightBlueAccent,
-              onPressed: () async {
+            ColourfulButton(
+              buttonColor: Colors.lightBlueAccent,
+              onTap: () async {
                 var docRef =
                     await _firestore.collection('inProcessingOrders').add({
                   'downloadPlace': downloadPlace,
@@ -110,14 +111,11 @@ class ShowOrderDetailPage extends StatelessWidget {
                 print(documentId);
                 Navigator.pushNamed(context, HistoryPage.id);
               },
-              child: Text(
-                'Отозваться на заявку',
-                style: TextStyle(color: Colors.black54),
-              ),
+              buttonText: 'Отозваться на заявку',
             ),
-            FlatButton(
-              color: Colors.lightGreenAccent,
-              onPressed: () async {
+            ColourfulButton(
+              buttonColor: Colors.lightGreenAccent,
+              onTap: () async {
                 var collection = _firestore.collection('Orders');
                 var querySnapshots = await collection.get();
                 for (var snapshots in querySnapshots.docs) {
@@ -126,14 +124,11 @@ class ShowOrderDetailPage extends StatelessWidget {
 // <-- Document ID
                 }
               },
-              child: Text(
-                'Связаться с грузополучателем',
-                style: TextStyle(color: Colors.black54),
-              ),
+              buttonText: 'Связаться с грузополучателем',
             ),
-            FlatButton(
-              color: Colors.redAccent,
-              onPressed: () {
+            ColourfulButton(
+              buttonColor: Colors.redAccent,
+              onTap: () {
                 print(orderId);
                 _firestore
                     .collection('Orders')
@@ -145,10 +140,7 @@ class ShowOrderDetailPage extends StatelessWidget {
                     );
                 Navigator.pop(context);
               },
-              child: Text(
-                'Отменить запрос',
-                style: TextStyle(color: Colors.black54),
-              ),
+              buttonText: 'Отменить запрос',
             ),
           ],
         ),

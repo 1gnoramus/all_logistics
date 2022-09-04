@@ -4,6 +4,7 @@ import 'package:all_log/components/history_rapid_data_block.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:all_log/components/order_data.dart';
+import 'package:all_log/components/colourful_button.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -158,9 +159,9 @@ class History extends StatelessWidget {
                             ],
                           ),
                         ),
-                        FlatButton(
-                          color: Colors.lightGreenAccent,
-                          onPressed: () async {
+                        ColourfulButton(
+                          buttonColor: Colors.lightGreenAccent,
+                          onTap: () async {
                             print(orderId);
                             var docRef = await _firestore
                                 .collection('acceptedOrders')
@@ -191,48 +192,41 @@ class History extends StatelessWidget {
                             print(documentId);
                             Navigator.pop(context);
                           },
-                          child: Text(
-                            'Принять запрос',
-                            style: TextStyle(color: Colors.black54),
-                          ),
+                          buttonText: 'Принять запрос',
                         ),
-                        FlatButton(
-                          color: Colors.redAccent,
-                          onPressed: () async {
-                            var docRef = await _firestore
-                                .collection('rejectedOrders')
-                                .add({
-                              'downloadPlace': downloadPlace,
-                              'uploadPlace': uploadPlace,
-                              'uploadTime': uploadTime,
-                              'transType': transType,
-                              'customerUsername': custUserName,
-                              'executorUsername': loggedinUser.email,
-                              'number': orderNum,
-                              'orderId': orderId,
-                            });
-                            _firestore
-                                .collection('inProcessingOrders')
-                                .doc(orderId.toString())
-                                .delete()
-                                .then(
-                                  (doc) => print("Document deleted"),
-                                  onError: (e) =>
-                                      print("Error updating document $e"),
-                                );
-                            var documentId = docRef.id;
-                            _firestore
-                                .collection('rejectedOrders')
-                                .doc(documentId)
-                                .update({'orderId': documentId});
-                            print(documentId);
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Отклонить запрос',
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                        ),
+                        ColourfulButton(
+                            buttonColor: Colors.redAccent,
+                            onTap: () async {
+                              var docRef = await _firestore
+                                  .collection('rejectedOrders')
+                                  .add({
+                                'downloadPlace': downloadPlace,
+                                'uploadPlace': uploadPlace,
+                                'uploadTime': uploadTime,
+                                'transType': transType,
+                                'customerUsername': custUserName,
+                                'executorUsername': loggedinUser.email,
+                                'number': orderNum,
+                                'orderId': orderId,
+                              });
+                              _firestore
+                                  .collection('inProcessingOrders')
+                                  .doc(orderId.toString())
+                                  .delete()
+                                  .then(
+                                    (doc) => print("Document deleted"),
+                                    onError: (e) =>
+                                        print("Error updating document $e"),
+                                  );
+                              var documentId = docRef.id;
+                              _firestore
+                                  .collection('rejectedOrders')
+                                  .doc(documentId)
+                                  .update({'orderId': documentId});
+                              print(documentId);
+                              Navigator.pop(context);
+                            },
+                            buttonText: 'Отклонить запрос')
                       ],
                     ),
                   ),

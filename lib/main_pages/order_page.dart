@@ -56,7 +56,6 @@ class _OrderPageState extends State<OrderPage> {
         countryName = 'Unknown';
         return;
       }
-      print('sdasda$locationData');
       countryName = locationData[0].country.toString();
     });
   }

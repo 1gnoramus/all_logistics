@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:all_log/components/order_data.dart';
 import 'package:all_log/components/history_rapid_data_block.dart';
+import 'package:all_log/components/colourful_button.dart';
 
 final _auth = FirebaseAuth.instance;
 
@@ -160,25 +161,21 @@ class RejectedHistory extends StatelessWidget {
                             ],
                           ),
                         ),
-                        FlatButton(
-                          color: Colors.redAccent,
-                          onPressed: () async {
-                            _firestore
-                                .collection('rejectedOrders')
-                                .doc(orderId.toString())
-                                .delete()
-                                .then(
-                                  (doc) => print("Document deleted"),
-                                  onError: (e) =>
-                                      print("Error updating document $e"),
-                                );
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'Удалить запрос',
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                        ),
+                        ColourfulButton(
+                            buttonColor: Colors.redAccent,
+                            onTap: () async {
+                              _firestore
+                                  .collection('rejectedOrders')
+                                  .doc(orderId.toString())
+                                  .delete()
+                                  .then(
+                                    (doc) => print("Document deleted"),
+                                    onError: (e) =>
+                                        print("Error updating document $e"),
+                                  );
+                              Navigator.pop(context);
+                            },
+                            buttonText: 'Удалить запрос')
                       ],
                     ),
                   ),
