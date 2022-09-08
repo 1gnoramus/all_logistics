@@ -14,7 +14,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _auth = FirebaseAuth.instance;
-  bool showSpinner = false;
   String email = '';
   String password = '';
 
@@ -78,22 +77,13 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.orangeAccent,
               buttonText: 'Войти',
               onTap: () async {
-                setState(() {
-                  showSpinner = true;
-                });
                 try {
                   final user = await _auth.signInWithEmailAndPassword(
                       email: email, password: password);
                   if (user != null) {
                     Navigator.pushNamed(context, LoadingScreen.id);
                   } else {}
-                  setState(() {
-                    showSpinner = false;
-                  });
                 } catch (e) {
-                  setState(() {
-                    showSpinner = false;
-                  });
                   Alert(
                     context: context,
                     type: AlertType.error,
