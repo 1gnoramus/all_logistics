@@ -68,9 +68,11 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     updateLocation(Provider.of<OrderData>(context).userInfo);
+int _currentIndex = 0;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      bottomNavigationBar: BottomNavBar(),
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         actions: [
@@ -200,7 +202,6 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ),
           ),
-          BottomPanelWidget('Orders'),
           // FloatingActionButton(onPressed: floatBut),
         ],
       ),

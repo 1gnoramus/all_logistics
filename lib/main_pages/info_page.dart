@@ -139,7 +139,6 @@ class _InfoPageState extends State<InfoPage> {
               ),
             ),
           ),
-          BottomPanelWidget('Info')
         ],
       ),
     );

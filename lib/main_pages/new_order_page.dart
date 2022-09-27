@@ -160,7 +160,6 @@ class _NewOrderPageState extends State<NewOrderPage> {
               ],
             ),
           ),
-          BottomPanelWidget('Orders'),
         ],
       ),
     );

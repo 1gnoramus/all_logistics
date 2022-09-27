@@ -196,7 +196,6 @@ class _NewsPageState extends State<NewsPage> {
               ),
             ),
           ),
-          BottomPanelWidget('News'),
         ],
       ),
     );

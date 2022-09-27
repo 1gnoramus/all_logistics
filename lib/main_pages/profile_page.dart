@@ -171,7 +171,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ]),
           ),
-          BottomPanelWidget('Profile')
         ],
       ),
     );
