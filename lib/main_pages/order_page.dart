@@ -72,7 +72,6 @@ int _currentIndex = 0;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar: BottomNavBar(),
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         actions: [

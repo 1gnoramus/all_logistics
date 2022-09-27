@@ -13,6 +13,7 @@ import 'main_pages/history_page.dart';
 import 'main_pages/profile_page.dart';
 import 'components/order_data.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

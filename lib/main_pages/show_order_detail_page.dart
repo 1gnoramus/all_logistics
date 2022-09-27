@@ -109,7 +109,8 @@ class ShowOrderDetailPage extends StatelessWidget {
                     .doc(documentId)
                     .update({'orderId': documentId});
                 print(documentId);
-                Navigator.pushNamed(context, HistoryPage.id);
+                                Navigator.pop(context);
+
               },
               buttonText: 'Отозваться на заявку',
             ),
@@ -121,6 +122,8 @@ class ShowOrderDetailPage extends StatelessWidget {
                 for (var snapshots in querySnapshots.docs) {
                   var documentID = snapshots.id;
                   print(documentID);
+                                  Navigator.pop(context);
+
 // <-- Document ID
                 }
               },

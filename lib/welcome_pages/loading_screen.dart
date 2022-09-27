@@ -1,3 +1,4 @@
+import 'package:all_log/components/bottom_data.dart';
 import 'package:all_log/main_pages/order_page.dart';
 import 'package:all_log/services/location.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +39,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return OrderPage(
-            locationInfo: Provider.of<OrderData>(context).userInfo,
-          );
+          return BottomNavBar();
         },
       ),
     );
