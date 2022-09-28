@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:all_log/components/bottom_data.dart';
+import 'package:all_log/driver/driver_main.dart';
 
 class ProfilePage extends StatefulWidget {
   static String id = 'profile_page';

@@ -1,10 +1,10 @@
-import 'package:all_log/main_pages/history_page.dart';
-import 'package:all_log/main_pages/info_page.dart';
-import 'package:all_log/main_pages/news_page.dart';
-import 'package:all_log/main_pages/order_page.dart';
-import 'package:all_log/main_pages/profile_page.dart';
+import 'package:all_log/logistician/log_history_page.dart';
+import 'package:all_log/general/info_page.dart';
+import 'package:all_log/general/news_page.dart';
+import 'package:all_log/driver/driver_order_page.dart';
+import 'package:all_log/general/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import '../components/constants.dart';
 
 class BottomNavBar extends StatefulWidget {
 

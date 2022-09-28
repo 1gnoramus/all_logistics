@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'constants.dart';
+import '../components/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:all_log/main_pages/show_order_detail_page.dart';
+import 'package:all_log/general/show_order_detail_page.dart';
 import 'package:all_log/components/order_data.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -24,7 +24,6 @@ class OrderBox extends StatelessWidget {
 
   final String userName;
   final int orderNum;
-
   final IconData icon;
   final String uploadTime;
   final String uploadPlace;

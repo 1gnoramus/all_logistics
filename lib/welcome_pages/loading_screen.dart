@@ -1,5 +1,5 @@
-import 'package:all_log/components/bottom_data.dart';
-import 'package:all_log/main_pages/order_page.dart';
+import 'package:all_log/driver/driver_main.dart';
+import 'package:all_log/driver/driver_order_page.dart';
 import 'package:all_log/services/location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

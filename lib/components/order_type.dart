@@ -1,6 +1,6 @@
-import 'package:all_log/main_pages/new_order_page.dart';
+import 'package:all_log/general/new_order_page.dart';
 import 'package:flutter/material.dart';
-import 'package:all_log/main_pages/order_page.dart';
+import 'package:all_log/driver/driver_order_page.dart';
 
 class OrderType extends StatefulWidget {
   OrderType(this.colour, this.text);

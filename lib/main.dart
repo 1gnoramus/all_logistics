@@ -3,17 +3,17 @@ import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'main_pages/order_page.dart';
-import 'main_pages/news_page.dart';
+import 'driver/driver_order_page.dart';
+import 'general/news_page.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'welcome_pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'main_pages/info_page.dart';
-import 'main_pages/history_page.dart';
-import 'main_pages/profile_page.dart';
+import 'general/info_page.dart';
+import 'logistician/log_history_page.dart';
+import 'general/profile_page.dart';
 import 'components/order_data.dart';
 
-
+// TODO:WRAP main page in MultuProvider
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

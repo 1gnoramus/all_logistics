@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:all_log/main_pages/history_page.dart';
+import 'package:all_log/logistician/log_history_page.dart';
 
 class OrderData extends ChangeNotifier {
   List urgOrderBoxes = [];

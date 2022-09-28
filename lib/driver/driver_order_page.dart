@@ -1,9 +1,9 @@
 import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
-import 'new_order_page.dart';
+import '../general/new_order_page.dart';
 import 'package:flutter/material.dart';
-import '../components/order_info.dart';
-import '../components/bottom_data.dart';
+import 'driver_order_info.dart';
+import 'driver_main.dart';
 import 'package:all_log/components/order_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';

@@ -37,7 +37,7 @@ class HistoryStream extends StatelessWidget {
         }
 
         final histories = snapshot.data?.docs
-            .map((history) => History(
+            .map((history) => InProcHistory(
                   custUserName:
                       history.data().toString().contains('customerUsername')
                           ? history.get('customerUsername')
@@ -79,8 +79,8 @@ class HistoryStream extends StatelessWidget {
   }
 }
 
-class History extends StatelessWidget {
-  History({
+class InProcHistory extends StatelessWidget {
+  InProcHistory({
     required this.custUserName,
     required this.uploadPlace,
     required this.downloadPlace,

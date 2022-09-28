@@ -1,5 +1,5 @@
 import 'package:all_log/components/colourful_button.dart';
-import 'package:all_log/main_pages/history_page.dart';
+import 'package:all_log/logistician/log_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
