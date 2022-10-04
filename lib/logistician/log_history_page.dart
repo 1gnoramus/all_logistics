@@ -27,9 +27,10 @@ class _HistoryPageState extends State<HistoryPage> {
         backgroundColor: Colors.indigo,
         actions: [
           IconButton(
-            onPressed: () async{var response = await OrderProvider().getLogAcceptedOrders();
-            print(response); 
-           },
+            onPressed: () async {
+              var response = await OrderProvider().getDriverOrders();
+              print(response);
+            },
             icon: Icon(Icons.search),
           ),
           IconButton(
