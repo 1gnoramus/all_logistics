@@ -7,19 +7,19 @@ part of 'order_model.dart';
 // **************************************************************************
 
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
-      userName: json['userName'] as String,
-      uploadPlace: json['uploadPlace'] as String,
       downloadPlace: json['downloadPlace'] as String,
-      uploadTime: json['uploadTime'] as String,
-      transType: json['transType'] as String,
-      orderNum: json['orderNum'] as String,
-      isUrgent: json['isUrgent'] as String,
+      isUrgent: json['isUrgent'] as bool,
       orderId: json['orderId'] as String,
+      orderNum: json['orderNum'] as int,
+      transType: json['transType'] as String,
+      username: json['username'] as String,
+      uploadPlace: json['uploadPlace'] as String,
+      uploadTime: json['uploadTime'] as String,
     );
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     <String, dynamic>{
-      'userName': instance.userName,
+      'username': instance.username,
       'uploadPlace': instance.uploadPlace,
       'downloadPlace': instance.downloadPlace,
       'uploadTime': instance.uploadTime,

@@ -4,23 +4,23 @@ part 'order_model.g.dart';
 @JsonSerializable()
 class OrderModel {
   OrderModel({
-    required this.userName,
-    required this.uploadPlace,
     required this.downloadPlace,
-    required this.uploadTime,
-    required this.transType,
-    required this.orderNum,
     required this.isUrgent,
     required this.orderId,
+    required this.orderNum,
+    required this.transType,
+    required this.username,
+    required this.uploadPlace,
+    required this.uploadTime,
   });
 
-  final String userName;
+  final String username;
   final String uploadPlace;
   final String downloadPlace;
   final String uploadTime;
   final String transType;
-  final String orderNum;
-  final String isUrgent;
+  final int orderNum;
+  final bool isUrgent;
   final String orderId;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {

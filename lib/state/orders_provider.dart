@@ -12,12 +12,15 @@ class OrderProvider {
 
     try {
       final response = await _firestore.collection('Orders').get();
+      print(response.runtimeType);
       // JSON -> UserModel
-      for (var resp in response.docs.map((doc) => doc.data)) {
-        print(resp);
-        // var orderModel = OrderModel.fromJson(resp);
-        // orderBoxesList.add(orderModel);
+      for (var resp in response.docs) {
+        print(resp.data());
+        var orderModel = OrderModel.fromJson(resp.data());
+        orderBoxesList.add(orderModel);
       }
+      print(orderBoxesList.length);
+
       return orderBoxesList;
     } catch (e) {
       throw Exception('Exception on getDriverOrders: $e');
