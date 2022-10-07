@@ -2,6 +2,7 @@ import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import '../general/new_order_page.dart';
 import 'package:flutter/material.dart';
+import '../models/order_model.dart';
 import '../state/app_state.dart';
 import 'driver_order_info.dart';
 import 'driver_main.dart';
@@ -103,160 +104,180 @@ class _OrderPageState extends State<OrderPage> {
         ],
         title: Text('Order Page'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        textBaseline: TextBaseline.alphabetic,
-        children: [
-          Row(
-            children: [
-              OrderType(
-                Colors.red,
-                'Срочные: (${Provider.of<OrderData>(context).urgOrderBoxes.length})',
-              ),
-              GestureDetector(
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return NewOrderPage();
+      body: Consumer<AppStateManager>(
+        builder: (BuildContext context, AppStateManager appStateManager,
+            Widget? child) {
+          if (appStateManager.orders != null) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Row(
+                  children: [
+                    OrderType(
+                      Colors.red,
+                      'Срочные: (${Provider.of<OrderData>(context).urgOrderBoxes.length})',
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NewOrderPage();
+                            },
+                          ),
+                        );
                       },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        width: 40.0,
+                        height: 40.0,
+                        margin: EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  width: 40.0,
-                  height: 40.0,
-                  margin: EdgeInsets.all(10.0),
-                  child: Center(
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.blue,
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: Material(
+                      color: Colors.orangeAccent,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                      elevation: 5.0,
+                      child: OrdersStream(
+                        isUrgent: true,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.all(10.0),
-              child: Material(
-                color: Colors.orangeAccent,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
+                SizedBox(
+                  width: 200.0,
                 ),
-                elevation: 5.0,
-                child: OrdersStream(
-                  isUrgent: true,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 200.0,
-          ),
-          Row(
-            children: [
-              OrderType(
-                Colors.green,
-                'Обычные : (${Provider.of<OrderData>(context).comOrderBoxes.length})',
-              ),
-              GestureDetector(
-                onTap: () async {
-                  var typedData = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return NewOrderPage();
+                Row(
+                  children: [
+                    OrderType(
+                      Colors.green,
+                      'Обычные : (${Provider.of<OrderData>(context).comOrderBoxes.length})',
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        var typedData = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NewOrderPage();
+                            },
+                          ),
+                        );
                       },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        width: 40.0,
+                        height: 40.0,
+                        margin: EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  width: 40.0,
-                  height: 40.0,
-                  margin: EdgeInsets.all(10.0),
-                  child: Center(
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.blue,
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: Material(
+                      color: Colors.greenAccent,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                      elevation: 5.0,
+                      child: OrdersStream(
+                        isUrgent: false,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.all(10.0),
-              child: Material(
-                color: Colors.greenAccent,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
-                ),
-                elevation: 5.0,
-                child: OrdersStream(
-                  isUrgent: false,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Material(
-              borderRadius: BorderRadius.circular(15.0),
-              color: Colors.white,
-              child: Column(
-                children: [
-                  const Text(
-                    'userName    ',
-                    style: TextStyle(fontSize: 12.0, color: Colors.black54),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
+                Expanded(
+                  child: Material(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.white,
+                    child: Column(
                       children: [
-                        Container(
-                          child: Column(
-                            children: [
-                              MainOrderInfo('МЕСТО ОТГРУЗКИ:', uploadPlace),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              MainOrderInfo('МЕСТО ВЫГРУЗКИ:', downloadPlace),
-                            ],
+                        ...appStateManager.orders!.map(
+                          (OrderModel order) => Text(
+                            '${order.username}',
+                            style: TextStyle(
+                                fontSize: 12.0, color: Colors.black54),
                           ),
                         ),
-                        SizedBox(
-                          width: 60.0,
+                        Text(
+                          'userName    ',
+                          style:
+                              TextStyle(fontSize: 12.0, color: Colors.black54),
                         ),
                         Container(
-                          child: Column(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Row(
                             children: [
-                              MainOrderInfo('ВРЕМЯ ОТГРУЗКИ:', uploadPlace),
+                              Container(
+                                child: Column(
+                                  children: [
+                                    MainOrderInfo(
+                                        'МЕСТО ОТГРУЗКИ:', uploadPlace),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    MainOrderInfo(
+                                        'МЕСТО ВЫГРУЗКИ:', downloadPlace),
+                                  ],
+                                ),
+                              ),
                               SizedBox(
-                                height: 10.0,
+                                width: 60.0,
                               ),
-                              MainOrderInfo('ТИП ТРАНСПОРТА:', uploadPlace),
+                              Container(
+                                child: Column(
+                                  children: [
+                                    MainOrderInfo(
+                                        'ВРЕМЯ ОТГРУЗКИ:', uploadPlace),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    MainOrderInfo(
+                                        'ТИП ТРАНСПОРТА:', uploadPlace),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          )
-          // FloatingActionButton(onPressed: floatBut),
-        ],
+                )
+                // FloatingActionButton(onPressed: floatBut),
+              ],
+            );
+          }
+          return const CircularProgressIndicator();
+        },
       ),
     );
   }
