@@ -2,6 +2,7 @@ import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import '../general/new_order_page.dart';
 import 'package:flutter/material.dart';
+import '../state/app_state.dart';
 import 'driver_order_info.dart';
 import 'driver_main.dart';
 import 'package:all_log/components/order_type.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:all_log/components/order_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:all_log/state/orders_provider.dart';
 
 String uploadPlace = '';
 String downloadPlace = '';
@@ -26,6 +28,17 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  @override
+  void initState() {
+    super.initState();
+    getOrders();
+  }
+
+  void getOrders() async {
+    await Provider.of<AppStateManager>(context, listen: false)
+        .getDriverOrders();
+  }
+
   final _auth = FirebaseAuth.instance;
   late User loggedinUser;
 
@@ -61,14 +74,9 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     updateLocation(Provider.of<OrderData>(context).userInfo);
-int _currentIndex = 0;
+    int _currentIndex = 0;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -201,6 +209,52 @@ int _currentIndex = 0;
               ),
             ),
           ),
+          Expanded(
+            child: Material(
+              borderRadius: BorderRadius.circular(15.0),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  const Text(
+                    'userName    ',
+                    style: TextStyle(fontSize: 12.0, color: Colors.black54),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Column(
+                            children: [
+                              MainOrderInfo('МЕСТО ОТГРУЗКИ:', uploadPlace),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              MainOrderInfo('МЕСТО ВЫГРУЗКИ:', downloadPlace),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 60.0,
+                        ),
+                        Container(
+                          child: Column(
+                            children: [
+                              MainOrderInfo('ВРЕМЯ ОТГРУЗКИ:', uploadPlace),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              MainOrderInfo('ТИП ТРАНСПОРТА:', uploadPlace),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
           // FloatingActionButton(onPressed: floatBut),
         ],
       ),

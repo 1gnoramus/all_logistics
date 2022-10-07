@@ -1,4 +1,6 @@
 import 'package:all_log/components/order_data.dart';
+import 'package:all_log/state/app_state.dart';
+import 'package:all_log/state/orders_provider.dart';
 import 'package:all_log/welcome_pages/loading_screen.dart';
 import 'package:all_log/welcome_pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -20,15 +22,35 @@ void main() async {
   runApp(AllLogistics());
 }
 
-class AllLogistics extends StatelessWidget {
+class AllLogistics extends StatefulWidget {
+  @override
+  State<AllLogistics> createState() => _AllLogisticsState();
+}
+
+class _AllLogisticsState extends State<AllLogistics> {
   var logOrderData = null;
+
+  AppStateManager? appStateManager;
+
+  OrderProvider? orderProvider;
+
+  OrderData? orderData;
+
+  @override
+  void initState() {
+    orderData = OrderData();
+    orderProvider = OrderProvider();
+    appStateManager = AppStateManager(orderProvider: orderProvider);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) {
-        return OrderData();
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => OrderData()),
+        ChangeNotifierProvider(create: (context) => appStateManager)
+      ],
       child: MaterialApp(
         theme: ThemeData(
           colorScheme: ColorScheme.dark(
