@@ -4,7 +4,7 @@ import '../general/new_order_page.dart';
 import 'package:flutter/material.dart';
 import '../models/order_model.dart';
 import '../state/app_state.dart';
-import 'driver_order_info.dart';
+import 'driver_order_box.dart';
 import 'driver_main.dart';
 import 'package:all_log/components/order_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,8 +31,9 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
+    setState(() {});
+
     super.initState();
-    getOrders();
   }
 
   void getOrders() async {
@@ -54,11 +55,6 @@ class _OrderPageState extends State<OrderPage> {
     }
   }
 
-  String uploadPlace = '';
-  String downloadPlace = '';
-  String uploadTime = '';
-  String transpType = '';
-  bool isUrgent = false;
   String countryName = 'Russ';
 
   NewOrderPage newOrderPage = NewOrderPage();
@@ -117,7 +113,26 @@ class _OrderPageState extends State<OrderPage> {
                   children: [
                     OrderType(
                       Colors.red,
-                      'Срочные: (${Provider.of<OrderData>(context).urgOrderBoxes.length})',
+                      'Срочные: ',
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        getOrders();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        width: 40.0,
+                        height: 40.0,
+                        margin: EdgeInsets.all(5.0),
+                        child: Center(
+                          child: Icon(
+                            Icons.refresh,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -136,7 +151,7 @@ class _OrderPageState extends State<OrderPage> {
                             borderRadius: BorderRadius.circular(10.0)),
                         width: 40.0,
                         height: 40.0,
-                        margin: EdgeInsets.all(10.0),
+                        margin: EdgeInsets.all(5.0),
                         child: Center(
                           child: Icon(
                             Icons.add,
@@ -156,8 +171,31 @@ class _OrderPageState extends State<OrderPage> {
                         Radius.circular(20.0),
                       ),
                       elevation: 5.0,
-                      child: OrdersStream(
-                        isUrgent: true,
+                      child: ListView.builder(
+                        itemCount: appStateManager.orders!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (appStateManager.orders![index].isUrgent) {
+                            return OrderBox(
+                                userName:
+                                    appStateManager.orders![index].username,
+                                icon: Icons.face,
+                                uploadPlace:
+                                    appStateManager.orders![index].uploadPlace,
+                                downloadPlace: appStateManager
+                                    .orders![index].downloadPlace,
+                                uploadTime:
+                                    appStateManager.orders![index].uploadTime,
+                                transType:
+                                    appStateManager.orders![index].transType,
+                                orderNum: index,
+                                orderStatus: appStateManager
+                                    .orders![index].isUrgent
+                                    .toString(),
+                                orderId:
+                                    appStateManager.orders![index].orderId);
+                          }
+                          return Center(child: Container());
+                        },
                       ),
                     ),
                   ),
@@ -169,11 +207,30 @@ class _OrderPageState extends State<OrderPage> {
                   children: [
                     OrderType(
                       Colors.green,
-                      'Обычные : (${Provider.of<OrderData>(context).comOrderBoxes.length})',
+                      'Обычные :',
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        getOrders();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        width: 40.0,
+                        height: 40.0,
+                        margin: EdgeInsets.all(5.0),
+                        child: Center(
+                          child: Icon(
+                            Icons.refresh,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                     ),
                     GestureDetector(
                       onTap: () async {
-                        var typedData = await Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
@@ -188,7 +245,7 @@ class _OrderPageState extends State<OrderPage> {
                             borderRadius: BorderRadius.circular(10.0)),
                         width: 40.0,
                         height: 40.0,
-                        margin: EdgeInsets.all(10.0),
+                        margin: EdgeInsets.all(5.0),
                         child: Center(
                           child: Icon(
                             Icons.add,
@@ -208,70 +265,37 @@ class _OrderPageState extends State<OrderPage> {
                         Radius.circular(20.0),
                       ),
                       elevation: 5.0,
-                      child: OrdersStream(
-                        isUrgent: false,
+                      child: ListView.builder(
+                        reverse: false,
+                        itemCount: appStateManager.orders!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (!appStateManager.orders![index].isUrgent) {
+                            return OrderBox(
+                                userName:
+                                    appStateManager.orders![index].username,
+                                icon: Icons.face,
+                                uploadPlace:
+                                    appStateManager.orders![index].uploadPlace,
+                                downloadPlace: appStateManager
+                                    .orders![index].downloadPlace,
+                                uploadTime:
+                                    appStateManager.orders![index].uploadTime,
+                                transType:
+                                    appStateManager.orders![index].transType,
+                                orderNum: index,
+                                orderStatus: appStateManager
+                                    .orders![index].isUrgent
+                                    .toString(),
+                                orderId:
+                                    appStateManager.orders![index].orderId);
+                          }
+                          return Center(child: Container());
+                        },
                       ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Material(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        ...appStateManager.orders!.map(
-                          (OrderModel order) => Text(
-                            '${order.username}',
-                            style: TextStyle(
-                                fontSize: 12.0, color: Colors.black54),
-                          ),
-                        ),
-                        Text(
-                          'userName    ',
-                          style:
-                              TextStyle(fontSize: 12.0, color: Colors.black54),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                child: Column(
-                                  children: [
-                                    MainOrderInfo(
-                                        'МЕСТО ОТГРУЗКИ:', uploadPlace),
-                                    const SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    MainOrderInfo(
-                                        'МЕСТО ВЫГРУЗКИ:', downloadPlace),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 60.0,
-                              ),
-                              Container(
-                                child: Column(
-                                  children: [
-                                    MainOrderInfo(
-                                        'ВРЕМЯ ОТГРУЗКИ:', uploadPlace),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    MainOrderInfo(
-                                        'ТИП ТРАНСПОРТА:', uploadPlace),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+
                 // FloatingActionButton(onPressed: floatBut),
               ],
             );

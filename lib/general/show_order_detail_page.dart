@@ -31,6 +31,7 @@ class ShowOrderDetailPage extends StatelessWidget {
     required this.transType,
     required this.orderNum,
     required this.orderId,
+    required this.orderStatus,
   });
 
   final int orderNum;
@@ -41,6 +42,7 @@ class ShowOrderDetailPage extends StatelessWidget {
   final String downloadPlace;
   final String transType;
   final String orderId;
+  final String orderStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,7 @@ class ShowOrderDetailPage extends StatelessWidget {
                     width: 20.0,
                   ),
                   Text(
-                    "Место отгрузки: $uploadPlace \nМесто выгрузки: $downloadPlace \nВремя отгрузки: $uploadTime \nТип транспорта: $transType",
+                    "Место отгрузки: $uploadPlace \nМесто выгрузки: $downloadPlace \nВремя отгрузки: $uploadTime \nТип транспорта: $transType \nСрочный: $orderStatus",
                     textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 15.0, color: Colors.black),
                   ),
@@ -109,8 +111,7 @@ class ShowOrderDetailPage extends StatelessWidget {
                     .doc(documentId)
                     .update({'orderId': documentId});
                 print(documentId);
-                                Navigator.pop(context);
-
+                Navigator.pop(context);
               },
               buttonText: 'Отозваться на заявку',
             ),
@@ -122,7 +123,7 @@ class ShowOrderDetailPage extends StatelessWidget {
                 for (var snapshots in querySnapshots.docs) {
                   var documentID = snapshots.id;
                   print(documentID);
-                                  Navigator.pop(context);
+                  Navigator.pop(context);
 
 // <-- Document ID
                 }
