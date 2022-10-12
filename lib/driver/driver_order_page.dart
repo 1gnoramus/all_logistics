@@ -31,8 +31,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
-    setState(() {});
-
+    getOrders();
     super.initState();
   }
 
@@ -295,8 +294,6 @@ class _OrderPageState extends State<OrderPage> {
                     ),
                   ),
                 ),
-
-                // FloatingActionButton(onPressed: floatBut),
               ],
             );
           }
@@ -306,5 +303,3 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 }
-// TODO: Добавить страницу заявки с возможность "Принять запрос" и "Связаться с ГП"
-// TODO: Соединить страницу со страницей "История" через Provider. Передавать информацию о заявках

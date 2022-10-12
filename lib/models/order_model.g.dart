@@ -15,11 +15,13 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
       username: json['username'] as String,
       uploadPlace: json['uploadPlace'] as String,
       uploadTime: json['uploadTime'] as String,
+      orderStatus: json['orderStatus'] as String,
     );
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     <String, dynamic>{
       'username': instance.username,
+      'orderStatus': instance.orderStatus,
       'uploadPlace': instance.uploadPlace,
       'downloadPlace': instance.downloadPlace,
       'uploadTime': instance.uploadTime,

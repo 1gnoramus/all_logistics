@@ -21,4 +21,34 @@ class AppStateManager extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> getInProcOrders() async {
+    try {
+      final response = await orderProvider?.getInProcOrders();
+      _orders = response;
+    } catch (e) {
+      throw Exception('Exception on getDriverOrders: $e');
+    }
+    notifyListeners();
+  }
+
+  Future<void> getAcceptedOrders() async {
+    try {
+      final response = await orderProvider?.getAcceptedOrders();
+      _orders = response;
+    } catch (e) {
+      throw Exception('Exception on getAcceptedOrders: $e');
+    }
+    notifyListeners();
+  }
+
+  Future<void> getRejectedOrders() async {
+    try {
+      final response = await orderProvider?.getRejectedOrders();
+      _orders = response;
+    } catch (e) {
+      throw Exception('Exception on getRejectedOrders: $e');
+    }
+    notifyListeners();
+  }
 }

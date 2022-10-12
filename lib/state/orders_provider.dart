@@ -27,39 +27,63 @@ class OrderProvider {
     }
   }
 
-  // Future <List<AcceptedHistory>> getLogAcceptedOrders ()async{
-  //   List<AcceptedHistory> historyList = [];
-  //  try {
-  //   final response = await _firestore.collection('acceptedOrders').get();
-  //   print(response);
-  //       return historyList;
+  Future<List<OrderModel>> getInProcOrders() async {
+    List<OrderModel> orderBoxesList = [];
 
-  //     throw Exception("User is not exists");
-  //   } catch (e) {
-  //     throw Exception('Exception on getLogAcceptedOrders: $e');
-  //   }
-  // }
+    try {
+      final response = await _firestore.collection('inProcessingOrders').get();
+      print(response.runtimeType);
+      // JSON -> UserModel
+      for (var resp in response.docs) {
+        print(resp.data());
+        var orderModel = OrderModel.fromJson(resp.data());
+        orderBoxesList.add(orderModel);
+      }
+      print(orderBoxesList.length);
 
-  //   Future <List<InProcHistory>> getLogInProcOrders ()async{
-  //       List<InProcHistory> historyList = [];
-  //  try {
-  //       return historyList;
+      return orderBoxesList;
+    } catch (e) {
+      throw Exception('Exception on getInProcOrders: $e');
+    }
+  }
 
-  //     throw Exception("User is not exists");
-  //   } catch (e) {
-  //     throw Exception('Exception on getLogInProcOrders: $e');
-  //   }
-  // }
+  Future<List<OrderModel>> getAcceptedOrders() async {
+    List<OrderModel> orderBoxesList = [];
 
-  //   Future <List<AcceptedHistory>> getLogRejectedOrders ()async{
-  //       List<AcceptedHistory> historyList = [];
-  //  try {
-  //       return historyList;
+    try {
+      final response = await _firestore.collection('acceptedOrders').get();
+      print(response.runtimeType);
+      // JSON -> UserModel
+      for (var resp in response.docs) {
+        print(resp.data());
+        var orderModel = OrderModel.fromJson(resp.data());
+        orderBoxesList.add(orderModel);
+      }
+      print(orderBoxesList.length);
 
-  //     throw Exception("User is not exists");
-  //   } catch (e) {
-  //     throw Exception('Exception on getLogRejectedOrders: $e');
-  //   }
-  // }
+      return orderBoxesList;
+    } catch (e) {
+      throw Exception('Exception on getAcceptedOrders: $e');
+    }
+  }
 
+  Future<List<OrderModel>> getRejectedOrders() async {
+    List<OrderModel> orderBoxesList = [];
+
+    try {
+      final response = await _firestore.collection('rejectedOrders').get();
+      print(response.runtimeType);
+      // JSON -> UserModel
+      for (var resp in response.docs) {
+        print(resp.data());
+        var orderModel = OrderModel.fromJson(resp.data());
+        orderBoxesList.add(orderModel);
+      }
+      print(orderBoxesList.length);
+
+      return orderBoxesList;
+    } catch (e) {
+      throw Exception('Exception on getRejectedOrders: $e');
+    }
+  }
 }

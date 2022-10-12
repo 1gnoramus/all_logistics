@@ -128,6 +128,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
                       'orderNum': Provider.of<OrderData>(context, listen: false)
                           .ordersIDList
                           .length,
+                      'orderStatus': 'placed'
                     });
                     var documentId = order.id;
                     print(documentId);

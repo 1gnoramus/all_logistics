@@ -12,9 +12,11 @@ class OrderModel {
     required this.username,
     required this.uploadPlace,
     required this.uploadTime,
+    required this.orderStatus,
   });
 
   final String username;
+  final String orderStatus;
   final String uploadPlace;
   final String downloadPlace;
   final String uploadTime;
