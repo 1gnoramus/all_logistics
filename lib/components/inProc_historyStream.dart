@@ -1,83 +1,8 @@
+import 'package:all_log/state/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:all_log/components/history_rapid_data_block.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:all_log/components/order_data.dart';
 import 'package:all_log/components/colourful_button.dart';
-
-final _auth = FirebaseAuth.instance;
-final _firestore = FirebaseFirestore.instance;
-late User loggedinUser;
-
-class HistoryStream extends StatelessWidget {
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser;
-      if (user != null) {
-        loggedinUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    getCurrentUser();
-    return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('inProcessingOrders').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Colors.redAccent,
-            ),
-          );
-        }
-
-        final histories = snapshot.data?.docs
-            .map((history) => InProcHistory(
-                  custUserName:
-                      history.data().toString().contains('customerUsername')
-                          ? history.get('customerUsername')
-                          : '',
-                  uploadPlace: history.data().toString().contains('uploadPlace')
-                      ? history.get('uploadPlace')
-                      : '',
-                  downloadPlace:
-                      history.data().toString().contains('downloadPlace')
-                          ? history.get('downloadPlace')
-                          : '',
-                  uploadTime: history.data().toString().contains('uploadTime')
-                      ? history.get('uploadTime')
-                      : '',
-                  transType: history.data().toString().contains('transType')
-                      ? history.get('transType')
-                      : '',
-                  orderNum: history.data().toString().contains('number')
-                      ? history.get('number').toString()
-                      : '',
-                  status: '',
-                  orderId: history.data().toString().contains('orderId')
-                      ? history.get('orderId').toString()
-                      : '',
-                  color: Colors.orangeAccent,
-                ))
-            .toList();
-
-        Provider.of<OrderData>(context).inProcHistList = histories!;
-
-        return ListView.builder(
-          itemCount: Provider.of<OrderData>(context).inProcHistList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Provider.of<OrderData>(context).inProcHistList[index];
-          },
-        );
-      },
-    );
-  }
-}
 
 class InProcHistory extends StatelessWidget {
   InProcHistory({
@@ -162,34 +87,8 @@ class InProcHistory extends StatelessWidget {
                         ColourfulButton(
                           buttonColor: Colors.lightGreenAccent,
                           onTap: () async {
-                            print(orderId);
-                            var docRef = await _firestore
-                                .collection('acceptedOrders')
-                                .add({
-                              'downloadPlace': downloadPlace,
-                              'uploadPlace': uploadPlace,
-                              'uploadTime': uploadTime,
-                              'transType': transType,
-                              'customerUsername': custUserName,
-                              'executorUsername': loggedinUser.email,
-                              'number': orderNum,
-                              'orderId': orderId,
-                            });
-                            _firestore
-                                .collection('inProcessingOrders')
-                                .doc(orderId.toString())
-                                .delete()
-                                .then(
-                                  (doc) => print("Document deleted"),
-                                  onError: (e) =>
-                                      print("Error updating document $e"),
-                                );
-                            var documentId = docRef.id;
-                            _firestore
-                                .collection('acceptedOrders')
-                                .doc(documentId)
-                                .update({'orderId': documentId});
-                            print(documentId);
+                            Provider.of<AppStateManager>(context, listen: false)
+                                .changeOrderStatus_Accepted(orderId);
                             Navigator.pop(context);
                           },
                           buttonText: 'Принять запрос',
@@ -197,33 +96,9 @@ class InProcHistory extends StatelessWidget {
                         ColourfulButton(
                             buttonColor: Colors.redAccent,
                             onTap: () async {
-                              var docRef = await _firestore
-                                  .collection('rejectedOrders')
-                                  .add({
-                                'downloadPlace': downloadPlace,
-                                'uploadPlace': uploadPlace,
-                                'uploadTime': uploadTime,
-                                'transType': transType,
-                                'customerUsername': custUserName,
-                                'executorUsername': loggedinUser.email,
-                                'number': orderNum,
-                                'orderId': orderId,
-                              });
-                              _firestore
-                                  .collection('inProcessingOrders')
-                                  .doc(orderId.toString())
-                                  .delete()
-                                  .then(
-                                    (doc) => print("Document deleted"),
-                                    onError: (e) =>
-                                        print("Error updating document $e"),
-                                  );
-                              var documentId = docRef.id;
-                              _firestore
-                                  .collection('rejectedOrders')
-                                  .doc(documentId)
-                                  .update({'orderId': documentId});
-                              print(documentId);
+                              Provider.of<AppStateManager>(context,
+                                      listen: false)
+                                  .changeOrderStatus_Rejected(orderId);
                               Navigator.pop(context);
                             },
                             buttonText: 'Отклонить запрос')

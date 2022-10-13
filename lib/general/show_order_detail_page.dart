@@ -1,8 +1,10 @@
 import 'package:all_log/components/colourful_button.dart';
 import 'package:all_log/logistician/log_history_page.dart';
+import 'package:all_log/state/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -118,22 +120,15 @@ class ShowOrderDetailPage extends StatelessWidget {
             ColourfulButton(
               buttonColor: Colors.lightGreenAccent,
               onTap: () async {
-                var collection = _firestore.collection('Orders');
-                var querySnapshots = await collection.get();
-                for (var snapshots in querySnapshots.docs) {
-                  var documentID = snapshots.id;
-                  print(documentID);
-                  Navigator.pop(context);
-
-// <-- Document ID
-                }
+                var resp =
+                    await Provider.of<AppStateManager>(context, listen: false)
+                        .changeOrderStatus_InProc(orderId);
               },
               buttonText: 'Связаться с грузополучателем',
             ),
             ColourfulButton(
               buttonColor: Colors.redAccent,
               onTap: () {
-                print(orderId);
                 _firestore
                     .collection('Orders')
                     .doc(orderId.toString())

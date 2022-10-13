@@ -6,83 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:all_log/components/order_data.dart';
 import 'package:all_log/components/history_rapid_data_block.dart';
 
-final _auth = FirebaseAuth.instance;
-
-final _firestore = FirebaseFirestore.instance;
-late User loggedinUser;
-
-class AcceptedHistoryStream extends StatelessWidget {
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser;
-      if (user != null) {
-        loggedinUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    getCurrentUser();
-    return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('acceptedOrders').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Colors.redAccent,
-            ),
-          );
-        }
-
-        final histories = snapshot.data?.docs
-            .map((history) => AcceptedHistory(
-                  custUserName:
-                      history.data().toString().contains('customerUsername')
-                          ? history.get('customerUsername')
-                          : '',
-                  uploadPlace: history.data().toString().contains('uploadPlace')
-                      ? history.get('uploadPlace')
-                      : '',
-                  downloadPlace:
-                      history.data().toString().contains('downloadPlace')
-                          ? history.get('downloadPlace')
-                          : '',
-                  uploadTime: history.data().toString().contains('uploadTime')
-                      ? history.get('uploadTime')
-                      : '',
-                  transType: history.data().toString().contains('transType')
-                      ? history.get('transType')
-                      : '',
-                  orderNum: history.data().toString().contains('number')
-                      ? history.get('number').toString()
-                      : '',
-                  status: '',
-                  orderId: history.data().toString().contains('orderId')
-                      ? history.get('orderId').toString()
-                      : '',
-                  color: Colors.green,
-                ))
-            .toList();
-
-        Provider.of<OrderData>(context).acceptedHistList = histories!;
-
-        return ListView.builder(
-          itemCount: Provider.of<OrderData>(context).acceptedHistList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Provider.of<OrderData>(context).acceptedHistList[index];
-          },
-        );
-      },
-    );
-  }
-}
+import '../state/app_state.dart';
 
 class AcceptedHistory extends StatelessWidget {
   AcceptedHistory({
@@ -167,16 +91,9 @@ class AcceptedHistory extends StatelessWidget {
                         ColourfulButton(
                             buttonColor: Colors.lightBlueAccent,
                             onTap: () {
-                              print(orderId);
-                              _firestore
-                                  .collection('acceptedOrders')
-                                  .doc(orderId.toString())
-                                  .delete()
-                                  .then(
-                                    (doc) => print("Document deleted"),
-                                    onError: (e) =>
-                                        print("Error updating document $e"),
-                                  );
+                              Provider.of<AppStateManager>(context,
+                                      listen: false)
+                                  .changeOrderStatus_Completed(orderId);
                               Navigator.pop(context);
                             },
                             buttonText: 'Завершить запрос')

@@ -173,26 +173,30 @@ class _OrderPageState extends State<OrderPage> {
                       child: ListView.builder(
                         itemCount: appStateManager.orders!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          if (appStateManager.orders![index].isUrgent) {
-                            return OrderBox(
-                                userName:
-                                    appStateManager.orders![index].username,
-                                icon: Icons.face,
-                                uploadPlace:
-                                    appStateManager.orders![index].uploadPlace,
-                                downloadPlace: appStateManager
-                                    .orders![index].downloadPlace,
-                                uploadTime:
-                                    appStateManager.orders![index].uploadTime,
-                                transType:
-                                    appStateManager.orders![index].transType,
-                                orderNum: index,
-                                orderStatus: appStateManager
-                                    .orders![index].isUrgent
-                                    .toString(),
-                                orderId:
-                                    appStateManager.orders![index].orderId);
+                          if (appStateManager.orders![index].orderStatus ==
+                              'placed') {
+                            if (appStateManager.orders![index].isUrgent) {
+                              return OrderBox(
+                                  userName:
+                                      appStateManager.orders![index].username,
+                                  icon: Icons.face,
+                                  uploadPlace: appStateManager
+                                      .orders![index].uploadPlace,
+                                  downloadPlace: appStateManager
+                                      .orders![index].downloadPlace,
+                                  uploadTime:
+                                      appStateManager.orders![index].uploadTime,
+                                  transType:
+                                      appStateManager.orders![index].transType,
+                                  orderNum: index,
+                                  orderStatus: appStateManager
+                                      .orders![index].isUrgent
+                                      .toString(),
+                                  orderId:
+                                      appStateManager.orders![index].orderId);
+                            }
                           }
+
                           return Center(child: Container());
                         },
                       ),
@@ -268,26 +272,30 @@ class _OrderPageState extends State<OrderPage> {
                         reverse: false,
                         itemCount: appStateManager.orders!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          if (!appStateManager.orders![index].isUrgent) {
-                            return OrderBox(
-                                userName:
-                                    appStateManager.orders![index].username,
-                                icon: Icons.face,
-                                uploadPlace:
-                                    appStateManager.orders![index].uploadPlace,
-                                downloadPlace: appStateManager
-                                    .orders![index].downloadPlace,
-                                uploadTime:
-                                    appStateManager.orders![index].uploadTime,
-                                transType:
-                                    appStateManager.orders![index].transType,
-                                orderNum: index,
-                                orderStatus: appStateManager
-                                    .orders![index].isUrgent
-                                    .toString(),
-                                orderId:
-                                    appStateManager.orders![index].orderId);
+                          if (appStateManager.orders![index].orderStatus ==
+                              'placed') {
+                            if (!appStateManager.orders![index].isUrgent) {
+                              return OrderBox(
+                                  userName:
+                                      appStateManager.orders![index].username,
+                                  icon: Icons.face,
+                                  uploadPlace: appStateManager
+                                      .orders![index].uploadPlace,
+                                  downloadPlace: appStateManager
+                                      .orders![index].downloadPlace,
+                                  uploadTime:
+                                      appStateManager.orders![index].uploadTime,
+                                  transType:
+                                      appStateManager.orders![index].transType,
+                                  orderNum: index,
+                                  orderStatus: appStateManager
+                                      .orders![index].isUrgent
+                                      .toString(),
+                                  orderId:
+                                      appStateManager.orders![index].orderId);
+                            }
                           }
+
                           return Center(child: Container());
                         },
                       ),

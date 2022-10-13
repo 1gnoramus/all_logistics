@@ -30,11 +30,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void getOrders() async {
     await Provider.of<AppStateManager>(context, listen: false)
-        .getAcceptedOrders();
-    await Provider.of<AppStateManager>(context, listen: false)
-        .getInProcOrders();
-    await Provider.of<AppStateManager>(context, listen: false)
-        .getRejectedOrders();
+        .getDriverOrders();
   }
 
   @override
@@ -66,49 +62,114 @@ class _HistoryPageState extends State<HistoryPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    HistoryPiece(
-                      status: '0',
-                      title: 'Приняты в работу:',
-                      titleColor: Colors.green,
-                      statusText: 'Обрабатывается',
-                    ),
-                    HistoryPiece(
-                      status: '1',
-                      title:
-                          'Обрабатывается : (${Provider.of<OrderData>(context).inProcHistList.length})',
-                      titleColor: Colors.orange,
-                      statusText: 'Обрабатывается',
+                    Expanded(
+                      child: HistoryPiece(
+                        title: "Принятые в работу",
+                        titleColor: Colors.green.shade800,
+                        child: Expanded(
+                          child: ListView.builder(
+                            itemCount: appStateManager.orders!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (appStateManager.orders![index].orderStatus ==
+                                  'accepted') {
+                                return AcceptedHistory(
+                                    custUserName:
+                                        appStateManager.orders![index].username,
+                                    uploadPlace: appStateManager
+                                        .orders![index].uploadPlace,
+                                    downloadPlace: appStateManager
+                                        .orders![index].downloadPlace,
+                                    uploadTime: appStateManager
+                                        .orders![index].uploadTime,
+                                    transType: appStateManager
+                                        .orders![index].transType,
+                                    orderNum: appStateManager
+                                        .orders![index].orderNum
+                                        .toString(),
+                                    orderId:
+                                        appStateManager.orders![index].orderId,
+                                    status: appStateManager
+                                        .orders![index].orderStatus,
+                                    color: Colors.green);
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                          itemCount: appStateManager.orders!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return AcceptedHistory(
-                                custUserName:
-                                    appStateManager.orders![index].username,
-                                uploadPlace:
-                                    appStateManager.orders![index].uploadPlace,
-                                downloadPlace: appStateManager
-                                    .orders![index].downloadPlace,
-                                uploadTime:
-                                    appStateManager.orders![index].uploadTime,
-                                transType:
-                                    appStateManager.orders![index].transType,
-                                orderNum: appStateManager
-                                    .orders![index].orderNum
-                                    .toString(),
-                                orderId: appStateManager.orders![index].orderId,
-                                status:
-                                    appStateManager.orders![index].orderStatus,
-                                color: Colors.red);
-                          }),
+                      child: HistoryPiece(
+                        title: 'В обработке',
+                        titleColor: Colors.orange.shade800,
+                        child: Expanded(
+                          child: ListView.builder(
+                            itemCount: appStateManager.orders!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (appStateManager.orders![index].orderStatus ==
+                                  'inProcess') {
+                                return InProcHistory(
+                                    custUserName:
+                                        appStateManager.orders![index].username,
+                                    uploadPlace: appStateManager
+                                        .orders![index].uploadPlace,
+                                    downloadPlace: appStateManager
+                                        .orders![index].downloadPlace,
+                                    uploadTime: appStateManager
+                                        .orders![index].uploadTime,
+                                    transType: appStateManager
+                                        .orders![index].transType,
+                                    orderNum: appStateManager
+                                        .orders![index].orderNum
+                                        .toString(),
+                                    orderId:
+                                        appStateManager.orders![index].orderId,
+                                    status: appStateManager
+                                        .orders![index].orderStatus,
+                                    color: Colors.orange);
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: HistoryPiece(
+                        title: 'Отмененные',
+                        titleColor: Colors.red.shade800,
+                        child: Expanded(
+                          child: ListView.builder(
+                            itemCount: appStateManager.orders!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (appStateManager.orders![index].orderStatus ==
+                                  'rejected') {
+                                return RejectedHistory(
+                                    custUserName:
+                                        appStateManager.orders![index].username,
+                                    uploadPlace: appStateManager
+                                        .orders![index].uploadPlace,
+                                    downloadPlace: appStateManager
+                                        .orders![index].downloadPlace,
+                                    uploadTime: appStateManager
+                                        .orders![index].uploadTime,
+                                    transType: appStateManager
+                                        .orders![index].transType,
+                                    orderNum: appStateManager
+                                        .orders![index].orderNum
+                                        .toString(),
+                                    orderId:
+                                        appStateManager.orders![index].orderId,
+                                    status: appStateManager
+                                        .orders![index].orderStatus,
+                                    color: Colors.red);
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
                     )
-                    // HistoryPiece(
-                    //   status: '2',
-                    //   title: 'Отмененные',
-                    //   titleColor: Colors.red.shade700,
-                    //   statusText: 'Обрабатывается',
-                    // ),
                   ],
                 ),
               ),
@@ -120,41 +181,30 @@ class _HistoryPageState extends State<HistoryPage> {
 
 class HistoryPiece extends StatelessWidget {
   HistoryPiece(
-      {required this.title,
-      required this.status,
-      required this.titleColor,
-      required this.statusText});
+      {required this.title, required this.titleColor, required this.child});
+
   final String title;
   final Color titleColor;
-  final String statusText;
-  final String status;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(bottom: 5.0),
-              padding: EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                color: titleColor,
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              child: Text(title),
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 5.0),
+            padding: EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              color: titleColor,
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
-            Expanded(
-              child: status == '0'
-                  ? AcceptedHistoryStream()
-                  : status == '1'
-                      ? HistoryStream()
-                      : RejectedHistoryStream(),
-            )
-          ],
-        ),
+            child: Text(title),
+          ),
+          child
+        ],
       ),
     );
   }
