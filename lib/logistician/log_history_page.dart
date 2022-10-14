@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:all_log/welcome_pages/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:all_log/driver/driver_main.dart';
-import 'package:all_log/components/inProc_historyStream.dart';
-import 'package:all_log/components/accepted_historyStream.dart';
-import 'package:all_log/components/rejected_historyStream.dart';
+import 'package:all_log/components/inProc_history.dart';
+import 'package:all_log/components/accepted_history.dart';
+import 'package:all_log/components/rejected_history.dart';
 import 'package:provider/provider.dart';
 import 'package:all_log/components/order_data.dart';
 import 'package:all_log/state/orders_provider.dart';
@@ -92,8 +92,9 @@ class _HistoryPageState extends State<HistoryPage> {
                               if (appStateManager.orders![index].orderStatus ==
                                   'accepted') {
                                 return AcceptedHistory(
-                                    custUserName:
-                                        appStateManager.orders![index].username,
+                                    custUserName: '',
+
+                                    // appStateManager.orders![index].username,
                                     uploadPlace: appStateManager
                                         .orders![index].uploadPlace,
                                     downloadPlace: appStateManager
@@ -128,8 +129,9 @@ class _HistoryPageState extends State<HistoryPage> {
                               if (appStateManager.orders![index].orderStatus ==
                                   'inProcess') {
                                 return InProcHistory(
-                                    custUserName:
-                                        appStateManager.orders![index].username,
+                                    custUserName: '',
+
+                                    // appStateManager.orders![index].username,
                                     uploadPlace: appStateManager
                                         .orders![index].uploadPlace,
                                     downloadPlace: appStateManager
@@ -164,8 +166,9 @@ class _HistoryPageState extends State<HistoryPage> {
                               if (appStateManager.orders![index].orderStatus ==
                                   'rejected') {
                                 return RejectedHistory(
-                                    custUserName:
-                                        appStateManager.orders![index].username,
+                                    custUserName: '',
+
+                                    // appStateManager.orders![index].username,
                                     uploadPlace: appStateManager
                                         .orders![index].uploadPlace,
                                     downloadPlace: appStateManager

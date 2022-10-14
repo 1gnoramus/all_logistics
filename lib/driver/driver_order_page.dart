@@ -177,8 +177,9 @@ class _OrderPageState extends State<OrderPage> {
                               'placed') {
                             if (appStateManager.orders![index].isUrgent) {
                               return OrderBox(
-                                  userName:
-                                      appStateManager.orders![index].username,
+                                  userName: '',
+
+                                  // appStateManager.orders![index].username,
                                   icon: Icons.face,
                                   uploadPlace: appStateManager
                                       .orders![index].uploadPlace,
@@ -276,8 +277,9 @@ class _OrderPageState extends State<OrderPage> {
                               'placed') {
                             if (!appStateManager.orders![index].isUrgent) {
                               return OrderBox(
-                                  userName:
-                                      appStateManager.orders![index].username,
+                                  userName: '',
+
+                                  // appStateManager.orders![index].username,
                                   icon: Icons.face,
                                   uploadPlace: appStateManager
                                       .orders![index].uploadPlace,
