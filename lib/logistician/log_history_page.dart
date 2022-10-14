@@ -62,6 +62,25 @@ class _HistoryPageState extends State<HistoryPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        getOrders();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        width: 40.0,
+                        height: 40.0,
+                        margin: EdgeInsets.all(5.0),
+                        child: Center(
+                          child: Icon(
+                            Icons.refresh,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: HistoryPiece(
                         title: "Принятые в работу",
