@@ -12,14 +12,14 @@ class InProcHistory extends StatelessWidget {
     required this.uploadTime,
     required this.transType,
     required this.orderNum,
-    required this.orderId,
+    this.orderId,
     required this.status,
     required this.color,
   });
 
   final String custUserName;
   final String orderNum;
-  final String orderId;
+  String? orderId;
   final String uploadTime;
   final String uploadPlace;
   final String downloadPlace;

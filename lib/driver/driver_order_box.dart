@@ -20,7 +20,7 @@ class OrderBox extends StatelessWidget {
       required this.transType,
       required this.orderNum,
       required this.orderStatus,
-      required this.orderId});
+      this.orderId});
 
   final String userName;
   final int orderNum;
@@ -30,7 +30,7 @@ class OrderBox extends StatelessWidget {
   final String downloadPlace;
   final String transType;
   final String orderStatus;
-  final String orderId;
+  String? orderId;
 
   @override
   Widget build(BuildContext context) {

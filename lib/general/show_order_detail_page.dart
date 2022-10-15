@@ -32,7 +32,7 @@ class ShowOrderDetailPage extends StatelessWidget {
     required this.uploadTime,
     required this.transType,
     required this.orderNum,
-    required this.orderId,
+    this.orderId,
     required this.orderStatus,
   });
 
@@ -43,7 +43,7 @@ class ShowOrderDetailPage extends StatelessWidget {
   final String uploadPlace;
   final String downloadPlace;
   final String transType;
-  final String orderId;
+  String? orderId;
   final String orderStatus;
 
   @override

@@ -8,8 +8,8 @@ class OrderModel {
   OrderModel({
     required this.downloadPlace,
     required this.isUrgent,
-    required this.orderId,
-    required this.orderNum,
+    this.orderId,
+    this.orderNum,
     required this.transType,
     required this.username,
     required this.uploadPlace,
@@ -18,20 +18,20 @@ class OrderModel {
     required this.cargoType,
     required this.cargoWeight,
     required this.cargoVolume,
-    required this.driverId,
+    this.driverId,
   });
 
-  final UserModel username;
+  final String username;
   final String orderStatus;
   final String uploadPlace;
   final String downloadPlace;
   final String uploadTime;
   final String transType;
-  final int orderNum;
+  int? orderNum;
   final bool isUrgent;
-  final String orderId;
-  final int cargoType;
-  final DriverModel driverId;
+  String? orderId;
+  final String cargoType;
+  String? driverId;
 
   final String cargoWeight;
   final String cargoVolume;

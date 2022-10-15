@@ -9,17 +9,17 @@ part of 'order_model.dart';
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
       downloadPlace: json['downloadPlace'] as String,
       isUrgent: json['isUrgent'] as bool,
-      orderId: json['orderId'] as String,
-      orderNum: json['orderNum'] as int,
+      orderId: json['orderId'] as String?,
+      orderNum: json['orderNum'] as int?,
       transType: json['transType'] as String,
-      username: UserModel.fromJson(json['username'] as Map<String, dynamic>),
+      username: json['username'] as String,
       uploadPlace: json['uploadPlace'] as String,
       uploadTime: json['uploadTime'] as String,
       orderStatus: json['orderStatus'] as String,
-      cargoType: json['cargoType'] as int,
+      cargoType: json['cargoType'] as String,
       cargoWeight: json['cargoWeight'] as String,
       cargoVolume: json['cargoVolume'] as String,
-      driverId: DriverModel.fromJson(json['driverId'] as Map<String, dynamic>),
+      driverId: json['driverId'] as String?,
     );
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>

@@ -27,6 +27,18 @@ class OrderProvider {
     }
   }
 
+  Future placeNewOrder(OrderModel orderModel) async {
+    try {
+      var order = orderModel.toJson();
+      await _firestore
+          .collection('Orders')
+          .add(order)
+          .then((value) => print('Success'));
+    } catch (e) {
+      throw Exception('Exception on placeNewOrder: $e');
+    }
+  }
+
   Future changeOrderStatus_InProc(orderId) async {
     try {
       final response = await _firestore
@@ -83,66 +95,6 @@ class OrderProvider {
           .update({'orderStatus': 'deleted'}).then((value) => print('Success'));
     } catch (e) {
       throw Exception('Exception on orderPicker: $e');
-    }
-  }
-
-  Future<List<OrderModel>> getInProcOrders() async {
-    List<OrderModel> orderBoxesList = [];
-
-    try {
-      final response = await _firestore.collection('inProcessingOrders').get();
-      print(response.runtimeType);
-      // JSON -> UserModel
-      for (var resp in response.docs) {
-        print(resp.data());
-        var orderModel = OrderModel.fromJson(resp.data());
-        orderBoxesList.add(orderModel);
-      }
-      print(orderBoxesList.length);
-
-      return orderBoxesList;
-    } catch (e) {
-      throw Exception('Exception on getInProcOrders: $e');
-    }
-  }
-
-  Future<List<OrderModel>> getAcceptedOrders() async {
-    List<OrderModel> orderBoxesList = [];
-
-    try {
-      final response = await _firestore.collection('acceptedOrders').get();
-      print(response.runtimeType);
-      // JSON -> UserModel
-      for (var resp in response.docs) {
-        print(resp.data());
-        var orderModel = OrderModel.fromJson(resp.data());
-        orderBoxesList.add(orderModel);
-      }
-      print(orderBoxesList.length);
-
-      return orderBoxesList;
-    } catch (e) {
-      throw Exception('Exception on getAcceptedOrders: $e');
-    }
-  }
-
-  Future<List<OrderModel>> getRejectedOrders() async {
-    List<OrderModel> orderBoxesList = [];
-
-    try {
-      final response = await _firestore.collection('rejectedOrders').get();
-      print(response.runtimeType);
-      // JSON -> UserModel
-      for (var resp in response.docs) {
-        print(resp.data());
-        var orderModel = OrderModel.fromJson(resp.data());
-        orderBoxesList.add(orderModel);
-      }
-      print(orderBoxesList.length);
-
-      return orderBoxesList;
-    } catch (e) {
-      throw Exception('Exception on getRejectedOrders: $e');
     }
   }
 }
